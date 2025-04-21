@@ -20,6 +20,15 @@ pub struct Position {
     pub row: usize,
 }
 
+impl Position {
+    pub const fn saturating_sub(self, other: Self) -> Self {
+        Self {
+            col: self.col.saturating_add(other.col),
+            row: self.row.saturating_add(other.row),
+        }
+    }
+}
+
 /// Represents the Terminal.
 /// Edge Case for platforms where `usize` < `u16`:
 /// Regardless of the actual size of the Terminal, this representation

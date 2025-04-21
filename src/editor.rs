@@ -5,8 +5,8 @@ use std::{
     panic::{set_hook, take_hook},
 };
 
-mod editorcommands;
-use editorcommands::EditorCommand;
+mod editorcommand;
+use editorcommand::EditorCommand;
 mod terminal;
 use terminal::Terminal;
 
@@ -83,18 +83,12 @@ impl Editor {
                 }
             }
         }
-        // else {
-        //     #[cfg(debug_assertions)]
-        //     {
-        //         panic!("Received and discarded unsupported or non-press event.");
-        //     }
-        // }
     }
 
     fn refresh_screen(&mut self) {
         let _ = Terminal::hide_caret();
         self.view.render();
-        let _ = Terminal::move_caret_to(self.view.get_position());
+        let _ = Terminal::move_caret_to(self.view.caret_position());
         let _ = Terminal::show_caret();
         let _ = Terminal::execute();
     }
