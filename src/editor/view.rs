@@ -30,6 +30,7 @@ impl View {
             EditorCommand::Move(direction) => self.move_text_location(&direction),
             EditorCommand::Resize(to) => self.resize(to),
             EditorCommand::Quit => {}
+            EditorCommand::Insert(character) => self.insert_char(character),
         }
     }
 
@@ -45,6 +46,31 @@ impl View {
         self.scroll_text_location_into_view();
         self.size = to;
     }
+
+    // region: Text-editing
+
+    fn insert_char(&mut self, character: char) {
+        let old_len = self
+            .buffer
+            .lines
+            .get(self.text_location.line_index)
+            .map_or(0, |line| line.grapheme_count());
+        self.buffer.insert_char(character, self.text_location);
+        let new_len = self
+            .buffer
+            .lines
+            .get(self.text_location.line_index)
+            .map_or(0, |line| line.grapheme_count());
+        let grapheme_delta = new_len.saturating_sub(old_len);
+        if grapheme_delta > 0 {
+            // move right for an added grapheme (should be the regular case)
+            self.move_right();
+            self.scroll_text_location_into_view();
+        }
+        self.needs_redraw = true;
+    }
+
+    // endregion
 
     // region: Rendering
 
@@ -102,7 +128,7 @@ impl View {
         full_message
     }
 
-    // Endregion: Rendering
+    // endregion
 
     // region: Scrolling
 
@@ -117,7 +143,9 @@ impl View {
         } else {
             false
         };
-        self.needs_redraw = self.needs_redraw || offset_changed;
+        if offset_changed {
+            self.needs_redraw = true;
+        }
     }
 
     fn scroll_horizontally(&mut self, to: usize) {
@@ -131,7 +159,9 @@ impl View {
         } else {
             false
         };
-        self.needs_redraw = self.needs_redraw || offset_changed;
+        if offset_changed {
+            self.needs_redraw = true;
+        }
     }
 
     fn scroll_text_location_into_view(&mut self) {
@@ -140,7 +170,7 @@ impl View {
         self.scroll_horizontally(col);
     }
 
-    // Endregion: Scrolling
+    // endregion
 
     // region: Location and Position Handling
 
@@ -157,7 +187,7 @@ impl View {
         Position { col, row }
     }
 
-    // Endregion: Location and Position Handling
+    // endregion
 
     // region: text location movement
 
@@ -244,7 +274,7 @@ impl View {
     fn snap_to_valid_line(&mut self) {
         self.text_location.line_index = min(self.text_location.line_index, self.buffer.height());
     }
-    // Endregion: text location movement
+    // endregion
 }
 
 impl Default for View {
