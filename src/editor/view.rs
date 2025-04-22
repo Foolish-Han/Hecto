@@ -31,7 +31,10 @@ impl View {
             EditorCommand::Resize(to) => self.resize(to),
             EditorCommand::Quit => {}
             EditorCommand::Insert(character) => self.insert_char(character),
+            EditorCommand::Delete => self.delete(),
+            EditorCommand::Backspace => self.backspace(),
         }
+        self.scroll_text_location_into_view();
     }
 
     pub fn load(&mut self, file_name: &str) {
@@ -43,12 +46,20 @@ impl View {
 
     fn resize(&mut self, to: Size) {
         self.needs_redraw = true;
-        self.scroll_text_location_into_view();
         self.size = to;
     }
 
     // region: Text-editing
 
+    fn backspace(&mut self) {
+        self.move_left();
+        self.delete();
+    }
+
+    fn delete(&mut self) {
+        self.buffer.delete_char(self.text_location);
+        self.needs_redraw = true;
+    }
     fn insert_char(&mut self, character: char) {
         let old_len = self
             .buffer
@@ -65,7 +76,6 @@ impl View {
         if grapheme_delta > 0 {
             // move right for an added grapheme (should be the regular case)
             self.move_right();
-            self.scroll_text_location_into_view();
         }
         self.needs_redraw = true;
     }
@@ -203,7 +213,6 @@ impl View {
             Direction::Home => self.move_to_start_of_line(),
             Direction::End => self.move_to_end_of_line(),
         }
-        self.scroll_text_location_into_view();
     }
 
     fn move_up(&mut self, step: usize) {

@@ -135,4 +135,16 @@ impl Line {
 
         self.fragments = Self::str_to_fragments(&result);
     }
+
+    pub fn delete_char(&mut self, grapheme_index: usize) {
+        let mut result = String::new();
+
+        for (index, fragment) in self.fragments.iter().enumerate() {
+            if grapheme_index != index {
+                result.push_str(&fragment.grapheme);
+            }
+        }
+
+        self.fragments = Self::str_to_fragments(&result);
+    }
 }
