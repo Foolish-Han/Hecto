@@ -1,12 +1,15 @@
 use std::io::{Error, Write, stdout};
 
-use crossterm::cursor::{Hide, MoveTo, Show};
-use crossterm::style::Print;
-use crossterm::terminal::{
-    Clear, ClearType, EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode,
-    enable_raw_mode, size,
+use crossterm::{
+    Command,
+    cursor::{Hide, MoveTo, Show},
+    queue,
+    style::{Attribute, Print},
+    terminal::{
+        Clear, ClearType, DisableLineWrap, EnableLineWrap, EnterAlternateScreen,
+        LeaveAlternateScreen, SetTitle, disable_raw_mode, enable_raw_mode, size,
+    },
 };
-use crossterm::{Command, queue};
 
 #[derive(Default, Clone, Copy)]
 pub struct Size {
@@ -41,6 +44,7 @@ impl Terminal {
     pub fn initialize() -> Result<(), Error> {
         enable_raw_mode()?;
         Self::enter_alternate_screen()?;
+        Self::disable_line_wrap()?;
         Self::clear_screen()?;
         Self::execute()?;
         Ok(())
@@ -48,22 +52,12 @@ impl Terminal {
 
     pub fn terminate() -> Result<(), Error> {
         Self::leave_alternate_screen()?;
+        Self::enable_line_wrap()?;
         Self::show_caret()?;
         Self::execute()?;
         disable_raw_mode()?;
         Ok(())
     }
-
-    pub fn enter_alternate_screen() -> Result<(), Error> {
-        Self::queue_command(EnterAlternateScreen)?;
-        Ok(())
-    }
-
-    pub fn leave_alternate_screen() -> Result<(), Error> {
-        Self::queue_command(LeaveAlternateScreen)?;
-        Ok(())
-    }
-
     pub fn clear_screen() -> Result<(), Error> {
         Self::queue_command(Clear(ClearType::All))?;
         Ok(())
@@ -83,6 +77,16 @@ impl Terminal {
         Ok(())
     }
 
+    pub fn enter_alternate_screen() -> Result<(), Error> {
+        Self::queue_command(EnterAlternateScreen)?;
+        Ok(())
+    }
+
+    pub fn leave_alternate_screen() -> Result<(), Error> {
+        Self::queue_command(LeaveAlternateScreen)?;
+        Ok(())
+    }
+
     pub fn hide_caret() -> Result<(), Error> {
         Self::queue_command(Hide)?;
         Ok(())
@@ -90,6 +94,21 @@ impl Terminal {
 
     pub fn show_caret() -> Result<(), Error> {
         Self::queue_command(Show)?;
+        Ok(())
+    }
+
+    pub fn disable_line_wrap() -> Result<(), Error> {
+        Self::queue_command(DisableLineWrap)?;
+        Ok(())
+    }
+
+    pub fn enable_line_wrap() -> Result<(), Error> {
+        Self::queue_command(EnableLineWrap)?;
+        Ok(())
+    }
+
+    pub fn set_title(title: &str) -> Result<(), Error> {
+        Self::queue_command(SetTitle(title))?;
         Ok(())
     }
 
@@ -103,6 +122,19 @@ impl Terminal {
         Self::clear_line()?;
         Self::print(line_text)?;
         Ok(())
+    }
+
+    pub fn print_inverted_row(row: usize, line_text: &str) -> Result<(), Error> {
+        let width = Self::size()?.width;
+        Self::print_row(
+            row,
+            &format!(
+                "{}{:width$.width$}{}",
+                Attribute::Reverse,
+                line_text,
+                Attribute::Reset
+            ),
+        )
     }
 
     /// Returns the current size of this Terminal.

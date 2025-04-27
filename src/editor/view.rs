@@ -1,5 +1,5 @@
 use super::{
-    DocumentStatus,
+    DocumentStatus, NAME, VERSION,
     editorcommand::{Direction, EditorCommand},
     terminal::{Position, Size, Terminal},
 };
@@ -7,9 +7,6 @@ use std::{cmp::min, usize};
 mod buffer;
 use buffer::Buffer;
 mod line;
-
-const NAME: &str = env!("CARGO_PKG_NAME");
-const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[derive(Default, Clone, Copy)]
 pub struct Location {
@@ -21,6 +18,7 @@ pub struct View {
     buffer: Buffer,
     needs_redraw: bool,
     size: Size,
+    margin_bottom: usize,
     text_location: Location,
     scroll_offset: Position,
 }
@@ -35,6 +33,7 @@ impl View {
                 height: terminal_size.height.saturating_sub(margin_bottom),
                 width: terminal_size.width,
             },
+            margin_bottom,
             text_location: Location::default(),
             scroll_offset: Position::default(),
         }
@@ -44,8 +43,8 @@ impl View {
         DocumentStatus {
             total_lines: self.buffer.height(),
             current_line_index: self.text_location.line_index,
+            file_name: format!("{}", self.buffer.file_info),
             is_modified: self.buffer.dirty,
-            file_name: self.buffer.file_name.clone(),
         }
     }
 
@@ -80,9 +79,12 @@ impl View {
     }
 
     fn resize(&mut self, to: Size) {
-        self.needs_redraw = true;
+        self.size = Size {
+            width: to.width,
+            height: to.height.saturating_sub(self.margin_bottom),
+        };
         self.scroll_text_location_into_view();
-        self.size = to;
+        self.needs_redraw = true;
     }
 
     // endregion
@@ -169,20 +171,16 @@ impl View {
 
     fn build_welcome_message(width: usize) -> String {
         if width == 0 {
-            return " ".to_string();
+            return String::new();
         }
         let welcome_message = format!("{NAME} editor -- version {VERSION}");
         let len = welcome_message.len();
-        if width <= len {
+        let remaining_width = width.saturating_sub(1);
+        // hide the welcome message if it doesn't fit entirely.
+        if remaining_width < len {
             return "~".to_string();
         }
-        // we allow this since we don't care if our welcome message is put _exactly_ in the middle.
-        // it's allowed to be a bit to the left or right.
-        #[allow(clippy::integer_division)]
-        let padding = (width.saturating_sub(len).saturating_sub(1)) / 2;
-        let mut full_message = format!("~{}{}", " ".repeat(padding), welcome_message);
-        full_message.truncate(width);
-        full_message
+        format!("{:1<}{:^remaining_width$}", "~", welcome_message)
     }
 
     // endregion
