@@ -1,4 +1,5 @@
 use super::{
+    DocumentStatus,
     editorcommand::{Direction, EditorCommand},
     terminal::{Position, Size, Terminal},
 };
@@ -25,23 +26,27 @@ pub struct View {
 }
 
 impl View {
-    pub fn handle_command(&mut self, command: EditorCommand) {
-        match command {
-            EditorCommand::Move(direction) => self.move_text_location(&direction),
-            EditorCommand::Resize(to) => self.resize(to),
-            EditorCommand::Quit => {}
-            EditorCommand::Insert(character) => self.insert_char(character),
-            EditorCommand::Delete => self.delete(),
-            EditorCommand::Backspace => self.delete_backward(),
-            EditorCommand::Enter => self.insert_newline(),
-            EditorCommand::Save => self.save(),
+    pub fn new(margin_bottom: usize) -> Self {
+        let terminal_size = Terminal::size().unwrap_or_default();
+        Self {
+            buffer: Buffer::default(),
+            needs_redraw: true,
+            size: Size {
+                height: terminal_size.height.saturating_sub(margin_bottom),
+                width: terminal_size.width,
+            },
+            text_location: Location::default(),
+            scroll_offset: Position::default(),
         }
     }
 
-    fn resize(&mut self, to: Size) {
-        self.needs_redraw = true;
-        self.scroll_text_location_into_view();
-        self.size = to;
+    pub fn get_status(&self) -> DocumentStatus {
+        DocumentStatus {
+            total_lines: self.buffer.height(),
+            current_line_index: self.text_location.line_index,
+            is_modified: self.buffer.dirty,
+            file_name: self.buffer.file_name.clone(),
+        }
     }
 
     // region: file i/o
@@ -59,23 +64,46 @@ impl View {
 
     // endregion
 
+    // region: command handling
+
+    pub fn handle_command(&mut self, command: EditorCommand) {
+        match command {
+            EditorCommand::Move(direction) => self.move_text_location(direction),
+            EditorCommand::Resize(to) => self.resize(to),
+            EditorCommand::Quit => {}
+            EditorCommand::Insert(character) => self.insert_char(character),
+            EditorCommand::Delete => self.delete(),
+            EditorCommand::Backspace => self.delete_backward(),
+            EditorCommand::Enter => self.insert_newline(),
+            EditorCommand::Save => self.save(),
+        }
+    }
+
+    fn resize(&mut self, to: Size) {
+        self.needs_redraw = true;
+        self.scroll_text_location_into_view();
+        self.size = to;
+    }
+
+    // endregion
+
     // region: Text-editing
 
     fn insert_newline(&mut self) {
         self.buffer.insert_newline(self.text_location);
-        self.move_text_location(&Direction::Right);
+        self.move_text_location(Direction::Right);
         self.needs_redraw = true;
     }
 
     fn delete_backward(&mut self) {
         if self.text_location.line_index != 0 || self.text_location.grapheme_index != 0 {
-            self.move_text_location(&Direction::Left);
+            self.move_text_location(Direction::Left);
             self.delete();
         }
     }
 
     fn delete(&mut self) {
-        self.buffer.delete_char(self.text_location);
+        self.buffer.delete(self.text_location);
         self.needs_redraw = true;
     }
 
@@ -94,7 +122,7 @@ impl View {
         let grapheme_delta = new_len.saturating_sub(old_len);
         if grapheme_delta > 0 {
             // move right for an added grapheme (should be the regular case)
-            self.move_text_location(&Direction::Right);
+            self.move_text_location(Direction::Right);
         }
         self.needs_redraw = true;
     }
@@ -194,7 +222,7 @@ impl View {
     }
 
     fn scroll_text_location_into_view(&mut self) {
-        let Position { col, row } = self.text_location_to_position();
+        let Position { row, col } = self.text_location_to_position();
         self.scroll_vertically(row);
         self.scroll_horizontally(col);
     }
@@ -220,8 +248,10 @@ impl View {
 
     // region: text location movement
 
-    fn move_text_location(&mut self, direction: &Direction) {
+    fn move_text_location(&mut self, direction: Direction) {
         let Size { height, .. } = self.size;
+        // This match moves the positon, but does not check for all boundaries.
+        // The final boundarline checking happens after the match statement.
         match direction {
             Direction::Up => self.move_up(1),
             Direction::Down => self.move_down(1),
@@ -265,6 +295,7 @@ impl View {
 
     // clippy::arithmetic_side_effects: This function performs arithmetic calculations
     // after explicitly checking that the target value will be within bounds.
+    #[allow(clippy::arithmetic_side_effects)]
     fn move_left(&mut self) {
         if self.text_location.grapheme_index > 0 {
             self.text_location.grapheme_index -= 1;
@@ -304,16 +335,4 @@ impl View {
         self.text_location.line_index = min(self.text_location.line_index, self.buffer.height());
     }
     // endregion
-}
-
-impl Default for View {
-    fn default() -> Self {
-        Self {
-            buffer: Buffer::default(),
-            needs_redraw: true,
-            size: Terminal::size().unwrap_or_default(),
-            text_location: Location::default(),
-            scroll_offset: Position::default(),
-        }
-    }
 }
