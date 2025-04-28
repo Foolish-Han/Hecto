@@ -3,6 +3,7 @@ use super::{
     terminal::{Size, Terminal},
 };
 
+/// Represents the status bar in the editor.
 pub struct StatusBar {
     current_status: DocumentStatus,
     needs_redraw: bool,
@@ -13,6 +14,15 @@ pub struct StatusBar {
 }
 
 impl StatusBar {
+    /// Creates a new `StatusBar` instance.
+    ///
+    /// # Arguments
+    ///
+    /// * `margin_bottom` - The margin at the bottom of the status bar.
+    ///
+    /// # Returns
+    ///
+    /// A new `StatusBar` instance.
     pub fn new(margin_bottom: usize) -> Self {
         let size = Terminal::size().unwrap_or_default();
         let mut status_bar = Self {
@@ -27,6 +37,11 @@ impl StatusBar {
         status_bar
     }
 
+    /// Resizes the status bar to the specified size.
+    ///
+    /// # Arguments
+    ///
+    /// * `size` - The new size of the status bar.
     pub fn resize(&mut self, size: Size) {
         self.width = size.width;
         let mut position_y = 0;
@@ -44,6 +59,11 @@ impl StatusBar {
         self.needs_redraw = true;
     }
 
+    /// Updates the status of the status bar.
+    ///
+    /// # Arguments
+    ///
+    /// * `new_status` - The new status to update.
     pub fn update_status(&mut self, new_status: DocumentStatus) {
         if self.current_status != new_status {
             self.current_status = new_status;
@@ -51,6 +71,7 @@ impl StatusBar {
         }
     }
 
+    /// Renders the status bar.
     pub fn render(&mut self) {
         if !self.needs_redraw || !self.is_visible {
             return;

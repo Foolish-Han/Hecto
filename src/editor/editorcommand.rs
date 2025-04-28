@@ -3,31 +3,53 @@ use std::convert::TryFrom;
 
 use super::terminal::Size;
 
+/// Represents the direction of movement in the editor.
 #[derive(Clone, Copy)]
 pub enum Direction {
+    /// Move one page up.
     PageUp,
+    /// Move one page down.
     PageDown,
+    /// Move to the beginning of the line.
     Home,
+    /// Move to the end of the line.
     End,
+    /// Move one character to the left.
     Left,
+    /// Move one character to the right.
     Right,
+    /// Move one line up.
     Up,
+    /// Move one line down.
     Down,
 }
 
+/// Represents a command that can be executed by the editor.
 #[derive(Clone, Copy)]
 pub enum EditorCommand {
+    /// Move the caret in the specified direction.
     Move(Direction),
+    /// Resize the editor to the specified size.
     Resize(Size),
+    /// Quit the editor.
     Quit,
+    /// Insert the specified character at the current caret position.
     Insert(char),
+    /// Delete the character before the caret.
     Backspace,
+    /// Delete the character at the caret position.
     Delete,
+    /// Insert a newline at the caret position.
     Enter,
+    /// Save the current document.
     Save,
 }
 
-// clippy::as_conversions: Will run into problems for rare edge case systems where usize < u16
+/// Attempts to convert an `Event` into an `EditorCommand`.
+///
+/// # Errors
+///
+/// Returns an error string if the event cannot be converted into a valid command.
 #[allow(clippy::as_conversions)]
 impl TryFrom<Event> for EditorCommand {
     type Error = String;

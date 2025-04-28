@@ -17,9 +17,13 @@ mod fileinfo;
 mod view;
 use view::View;
 
+/// The name of the editor, retrieved from the environment.
 pub const NAME: &str = env!("CARGO_PKG_NAME");
+
+/// The version of the editor, retrieved from the environment.
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
+/// Represents the main editor application.
 pub struct Editor {
     should_quit: bool,
     view: View,
@@ -28,6 +32,7 @@ pub struct Editor {
 }
 
 impl Editor {
+    /// Creates a new instance of the editor.
     pub fn new() -> Result<Self, Error> {
         let current_hook = take_hook();
         set_hook(Box::new(move |panic_info| {
@@ -53,6 +58,7 @@ impl Editor {
         Ok(editor)
     }
 
+    /// Refreshes the status of the editor.
     pub fn refresh_status(&mut self) {
         let status = self.view.get_status();
         let title = format!("{} - {NAME}", status.file_name);
@@ -63,6 +69,7 @@ impl Editor {
         }
     }
 
+    /// Runs the main loop of the editor.
     pub fn run(&mut self) {
         loop {
             self.refresh_screen();
@@ -83,9 +90,11 @@ impl Editor {
         }
     }
 
-    // needless_pass_by_value: Event is not huge, so there is not a
-    // performance overhead in passing by value, and pattern matching in this
-    // function would be needlessly complicated if we pass by reference here.
+    /// Evaluates an event and processes it.
+    ///
+    /// # Arguments
+    ///
+    /// * `event` - The event to evaluate.
     #[allow(clippy::needless_pass_by_value)]
     fn evaluate_event(&mut self, event: Event) {
         let should_process = match &event {
@@ -108,6 +117,7 @@ impl Editor {
         }
     }
 
+    /// Refreshes the screen by rendering the view and status bar.
     fn refresh_screen(&mut self) {
         let _ = Terminal::hide_caret();
         self.view.render();
