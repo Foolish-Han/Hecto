@@ -5,14 +5,27 @@ use std::{
     io::{Error, Write},
 };
 
+/// Represents a text buffer.
 #[derive(Default)]
 pub struct Buffer {
+    /// The lines of text in the buffer.
     pub lines: Vec<Line>,
+    /// Information about the file associated with the buffer.
     pub file_info: FileInfo,
+    /// Indicates whether the buffer has been modified.
     pub dirty: bool,
 }
 
 impl Buffer {
+    /// Loads a file into the buffer.
+    ///
+    /// # Arguments
+    ///
+    /// * `file_name` - The name of the file to load.
+    ///
+    /// # Returns
+    ///
+    /// A result containing the loaded buffer or an error.
     pub fn load(file_name: &str) -> Result<Self, Error> {
         let contents = read_to_string(file_name)?;
         let mut lines = Vec::new();
@@ -26,6 +39,11 @@ impl Buffer {
         })
     }
 
+    /// Saves the buffer to a file.
+    ///
+    /// # Returns
+    ///
+    /// A result indicating success or failure.
     pub fn save(&mut self) -> Result<(), Error> {
         if let Some(path) = &self.file_info.path {
             let mut file = File::create(path)?;
@@ -37,14 +55,30 @@ impl Buffer {
         Ok(())
     }
 
+    /// Checks if the buffer is empty.
+    ///
+    /// # Returns
+    ///
+    /// `true` if the buffer is empty, `false` otherwise.
     pub fn is_empty(&self) -> bool {
         self.lines.is_empty()
     }
 
+    /// Returns the height of the buffer (number of lines).
+    ///
+    /// # Returns
+    ///
+    /// The height of the buffer.
     pub fn height(&self) -> usize {
         self.lines.len()
     }
 
+    /// Inserts a character at the specified location in the buffer.
+    ///
+    /// # Arguments
+    ///
+    /// * `character` - The character to insert.
+    /// * `at` - The location to insert the character.
     pub fn insert_char(&mut self, character: char, at: Location) {
         if at.line_index > self.height() {
             return;
@@ -59,6 +93,11 @@ impl Buffer {
         }
     }
 
+    /// Deletes a character at the specified location in the buffer.
+    ///
+    /// # Arguments
+    ///
+    /// * `at` - The location to delete the character.
     pub fn delete(&mut self, at: Location) {
         if let Some(line) = self.lines.get(at.line_index) {
             if at.grapheme_index >= line.grapheme_count()
@@ -79,6 +118,11 @@ impl Buffer {
         }
     }
 
+    /// Inserts a newline at the specified location in the buffer.
+    ///
+    /// # Arguments
+    ///
+    /// * `at` - The location to insert the newline.
     pub fn insert_newline(&mut self, at: Location) {
         if at.line_index == self.height() {
             self.lines.push(Line::default());

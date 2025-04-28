@@ -8,12 +8,16 @@ mod buffer;
 use buffer::Buffer;
 mod line;
 
+/// Represents a location in the text buffer.
 #[derive(Default, Clone, Copy)]
 pub struct Location {
+    /// The index of the grapheme within the line.
     pub grapheme_index: usize,
+    /// The index of the line within the buffer.
     pub line_index: usize,
 }
 
+/// Represents the view of the text buffer.
 pub struct View {
     buffer: Buffer,
     needs_redraw: bool,
@@ -24,6 +28,15 @@ pub struct View {
 }
 
 impl View {
+    /// Creates a new `View` instance.
+    ///
+    /// # Arguments
+    ///
+    /// * `margin_bottom` - The margin at the bottom of the view.
+    ///
+    /// # Returns
+    ///
+    /// A new `View` instance.
     pub fn new(margin_bottom: usize) -> Self {
         let terminal_size = Terminal::size().unwrap_or_default();
         Self {
@@ -39,6 +52,11 @@ impl View {
         }
     }
 
+    /// Returns the status of the document.
+    ///
+    /// # Returns
+    ///
+    /// A `DocumentStatus` instance representing the status of the document.
     pub fn get_status(&self) -> DocumentStatus {
         DocumentStatus {
             total_lines: self.buffer.height(),
@@ -50,6 +68,11 @@ impl View {
 
     // region: file i/o
 
+    /// Loads a file into the buffer.
+    ///
+    /// # Arguments
+    ///
+    /// * `file_name` - The name of the file to load.
     pub fn load(&mut self, file_name: &str) {
         if let Ok(buffer) = Buffer::load(file_name) {
             self.buffer = buffer;
@@ -57,6 +80,7 @@ impl View {
         }
     }
 
+    /// Saves the buffer to a file.
     pub fn save(&mut self) {
         let _ = self.buffer.save();
     }
@@ -65,6 +89,11 @@ impl View {
 
     // region: command handling
 
+    /// Handles an editor command.
+    ///
+    /// # Arguments
+    ///
+    /// * `command` - The command to handle.
     pub fn handle_command(&mut self, command: EditorCommand) {
         match command {
             EditorCommand::Move(direction) => self.move_text_location(direction),
@@ -78,6 +107,11 @@ impl View {
         }
     }
 
+    /// Resizes the view to the specified size.
+    ///
+    /// # Arguments
+    ///
+    /// * `to` - The new size of the view.
     fn resize(&mut self, to: Size) {
         self.size = Size {
             width: to.width,
@@ -91,12 +125,14 @@ impl View {
 
     // region: Text-editing
 
+    /// Inserts a newline at the current text location.
     fn insert_newline(&mut self) {
         self.buffer.insert_newline(self.text_location);
         self.move_text_location(Direction::Right);
         self.needs_redraw = true;
     }
 
+    /// Deletes the character before the current text location.
     fn delete_backward(&mut self) {
         if self.text_location.line_index != 0 || self.text_location.grapheme_index != 0 {
             self.move_text_location(Direction::Left);
@@ -104,11 +140,17 @@ impl View {
         }
     }
 
+    /// Deletes the character at the current text location.
     fn delete(&mut self) {
         self.buffer.delete(self.text_location);
         self.needs_redraw = true;
     }
 
+    /// Inserts a character at the current text location.
+    ///
+    /// # Arguments
+    ///
+    /// * `character` - The character to insert.
     fn insert_char(&mut self, character: char) {
         let old_len = self
             .buffer
@@ -133,6 +175,7 @@ impl View {
 
     // region: Rendering
 
+    /// Renders the view.
     pub fn render(&mut self) {
         if !self.needs_redraw {
             return;
@@ -164,13 +207,28 @@ impl View {
         self.needs_redraw = false;
     }
 
+    /// Renders a line of text at the specified position.
+    ///
+    /// # Arguments
+    ///
+    /// * `at` - The position to render the line.
+    /// * `line_text` - The text to render.
     fn render_line(at: usize, line_text: &str) {
         let result = Terminal::print_row(at, line_text);
         debug_assert!(result.is_ok(), "Failed to render line");
     }
 
+    /// Builds the welcome message for the editor.
+    ///
+    /// # Arguments
+    ///
+    /// * `width` - The width of the welcome message.
+    ///
+    /// # Returns
+    ///
+    /// A string containing the welcome message.
     fn build_welcome_message(width: usize) -> String {
-        if width == 0 {
+        if (width == 0) {
             return String::new();
         }
         let welcome_message = format!("{NAME} editor -- version {VERSION}");
@@ -187,6 +245,11 @@ impl View {
 
     // region: Scrolling
 
+    /// Scrolls the view vertically to the specified position.
+    ///
+    /// # Arguments
+    ///
+    /// * `to` - The position to scroll to.
     fn scroll_vertically(&mut self, to: usize) {
         let Size { height, .. } = self.size;
         let offset_changed = if to < self.scroll_offset.row {
@@ -203,6 +266,11 @@ impl View {
         }
     }
 
+    /// Scrolls the view horizontally to the specified position.
+    ///
+    /// # Arguments
+    ///
+    /// * `to` - The position to scroll to.
     fn scroll_horizontally(&mut self, to: usize) {
         let Size { width, .. } = self.size;
         let offset_changed = if to < self.scroll_offset.col {
@@ -219,6 +287,7 @@ impl View {
         }
     }
 
+    /// Scrolls the text location into view.
     fn scroll_text_location_into_view(&mut self) {
         let Position { row, col } = self.text_location_to_position();
         self.scroll_vertically(row);
@@ -229,11 +298,21 @@ impl View {
 
     // region: Location and Position Handling
 
+    /// Returns the caret position in the view.
+    ///
+    /// # Returns
+    ///
+    /// A `Position` instance representing the caret position.
     pub fn caret_position(&self) -> Position {
         self.text_location_to_position()
             .saturating_sub(self.scroll_offset)
     }
 
+    /// Converts the text location to a position in the view.
+    ///
+    /// # Returns
+    ///
+    /// A `Position` instance representing the position of the text location.
     fn text_location_to_position(&self) -> Position {
         let row = self.text_location.line_index;
         let col = self.buffer.lines.get(row).map_or(0, |line| {
@@ -246,6 +325,11 @@ impl View {
 
     // region: text location movement
 
+    /// Moves the text location in the specified direction.
+    ///
+    /// # Arguments
+    ///
+    /// * `direction` - The direction to move the text location.
     fn move_text_location(&mut self, direction: Direction) {
         let Size { height, .. } = self.size;
         // This match moves the positon, but does not check for all boundaries.
@@ -263,11 +347,21 @@ impl View {
         self.scroll_text_location_into_view();
     }
 
+    /// Moves the text location up by the specified number of steps.
+    ///
+    /// # Arguments
+    ///
+    /// * `step` - The number of steps to move up.
     fn move_up(&mut self, step: usize) {
         self.text_location.line_index = self.text_location.line_index.saturating_sub(step);
         self.snap_to_valid_grapheme();
     }
 
+    /// Moves the text location down by the specified number of steps.
+    ///
+    /// # Arguments
+    ///
+    /// * `step` - The number of steps to move down.
     fn move_down(&mut self, step: usize) {
         self.text_location.line_index = self.text_location.line_index.saturating_add(step);
         self.snap_to_valid_line();
@@ -303,10 +397,12 @@ impl View {
         }
     }
 
+    /// Moves the text location to the start of the current line.
     fn move_to_start_of_line(&mut self) {
         self.text_location.grapheme_index = 0;
     }
 
+    /// Moves the text location to the end of the current line.
     fn move_to_end_of_line(&mut self) {
         self.text_location.grapheme_index = self
             .buffer
@@ -315,8 +411,8 @@ impl View {
             .map_or(0, |line| line.grapheme_count());
     }
 
-    // Ensures self.location.grapheme_index points to a valid grapheme index by snapping it to the left most grapheme if appropriate.
-    // Doesn't trigger scrolling.
+    /// Ensures the text location points to a valid grapheme index by snapping it to the leftmost grapheme if appropriate.
+    /// Doesn't trigger scrolling.
     fn snap_to_valid_grapheme(&mut self) {
         self.text_location.grapheme_index = self
             .buffer
@@ -327,8 +423,8 @@ impl View {
             });
     }
 
-    // Ensures self.location.line_index points to a valid line index by snapping it to the bottom most line if appropriate.
-    // Doesn't trigger scrolling.
+    /// Ensures the text location points to a valid line index by snapping it to the bottommost line if appropriate.
+    /// Doesn't trigger scrolling.
     fn snap_to_valid_line(&mut self) {
         self.text_location.line_index = min(self.text_location.line_index, self.buffer.height());
     }
