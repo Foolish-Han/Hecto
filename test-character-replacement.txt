@@ -22,4 +22,3 @@ Combining: é (e with acute accent)
 
 # Testing regular symbols
 Symbols: ␣ (open box), ▯ (white vertical rectangle)
-

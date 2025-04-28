@@ -2,8 +2,9 @@ use super::{
     DocumentStatus, NAME, VERSION,
     editorcommand::{Direction, EditorCommand},
     terminal::{Position, Size, Terminal},
+    uicomponent::UIComponent,
 };
-use std::{cmp::min, usize};
+use std::{cmp::min, io::Error, usize};
 mod buffer;
 use buffer::Buffer;
 mod line;
@@ -18,40 +19,17 @@ pub struct Location {
 }
 
 /// Represents the view of the text buffer.
+#[derive(Default)]
 pub struct View {
     buffer: Buffer,
     needs_redraw: bool,
+    // The view always starts at `(0/0)`. The `size` property determines the visible area.
     size: Size,
-    margin_bottom: usize,
     text_location: Location,
     scroll_offset: Position,
 }
 
 impl View {
-    /// Creates a new `View` instance.
-    ///
-    /// # Arguments
-    ///
-    /// * `margin_bottom` - The margin at the bottom of the view.
-    ///
-    /// # Returns
-    ///
-    /// A new `View` instance.
-    pub fn new(margin_bottom: usize) -> Self {
-        let terminal_size = Terminal::size().unwrap_or_default();
-        Self {
-            buffer: Buffer::default(),
-            needs_redraw: true,
-            size: Size {
-                height: terminal_size.height.saturating_sub(margin_bottom),
-                width: terminal_size.width,
-            },
-            margin_bottom,
-            text_location: Location::default(),
-            scroll_offset: Position::default(),
-        }
-    }
-
     /// Returns the status of the document.
     ///
     /// # Returns
@@ -76,7 +54,7 @@ impl View {
     pub fn load(&mut self, file_name: &str) {
         if let Ok(buffer) = Buffer::load(file_name) {
             self.buffer = buffer;
-            self.needs_redraw = true;
+            self.mark_redraw(true);
         }
     }
 
@@ -97,28 +75,13 @@ impl View {
     pub fn handle_command(&mut self, command: EditorCommand) {
         match command {
             EditorCommand::Move(direction) => self.move_text_location(direction),
-            EditorCommand::Resize(to) => self.resize(to),
-            EditorCommand::Quit => {}
+            EditorCommand::Resize(_) | EditorCommand::Quit => {}
             EditorCommand::Insert(character) => self.insert_char(character),
             EditorCommand::Delete => self.delete(),
             EditorCommand::Backspace => self.delete_backward(),
             EditorCommand::Enter => self.insert_newline(),
             EditorCommand::Save => self.save(),
         }
-    }
-
-    /// Resizes the view to the specified size.
-    ///
-    /// # Arguments
-    ///
-    /// * `to` - The new size of the view.
-    fn resize(&mut self, to: Size) {
-        self.size = Size {
-            width: to.width,
-            height: to.height.saturating_sub(self.margin_bottom),
-        };
-        self.scroll_text_location_into_view();
-        self.needs_redraw = true;
     }
 
     // endregion
@@ -129,7 +92,7 @@ impl View {
     fn insert_newline(&mut self) {
         self.buffer.insert_newline(self.text_location);
         self.move_text_location(Direction::Right);
-        self.needs_redraw = true;
+        self.mark_redraw(true);
     }
 
     /// Deletes the character before the current text location.
@@ -143,7 +106,7 @@ impl View {
     /// Deletes the character at the current text location.
     fn delete(&mut self) {
         self.buffer.delete(self.text_location);
-        self.needs_redraw = true;
+        self.mark_redraw(true);
     }
 
     /// Inserts a character at the current text location.
@@ -168,44 +131,12 @@ impl View {
             // move right for an added grapheme (should be the regular case)
             self.move_text_location(Direction::Right);
         }
-        self.needs_redraw = true;
+        self.mark_redraw(true);
     }
 
     // endregion
 
     // region: Rendering
-
-    /// Renders the view.
-    pub fn render(&mut self) {
-        if !self.needs_redraw {
-            return;
-        }
-
-        let Size { height, width } = self.size;
-
-        if height == 0 || width == 0 {
-            return;
-        }
-
-        // we allow this since we don't care if our welcome message is put _exactly_ in the middle.
-        // it's allowed to be a bit too far up or down
-        #[allow(clippy::integer_division)]
-        let vertical_center = height.saturating_div(3);
-        let top = self.scroll_offset.row;
-
-        for current_row in 0..height {
-            if let Some(line) = self.buffer.lines.get(current_row.saturating_add(top)) {
-                let left = self.scroll_offset.col;
-                let right = self.scroll_offset.col.saturating_add(width);
-                Self::render_line(current_row, &line.get_visible_graphemes(left..right));
-            } else if current_row == vertical_center && self.buffer.is_empty() {
-                Self::render_line(current_row, &Self::build_welcome_message(width));
-            } else {
-                Self::render_line(current_row, "~");
-            }
-        }
-        self.needs_redraw = false;
-    }
 
     /// Renders a line of text at the specified position.
     ///
@@ -213,9 +144,8 @@ impl View {
     ///
     /// * `at` - The position to render the line.
     /// * `line_text` - The text to render.
-    fn render_line(at: usize, line_text: &str) {
-        let result = Terminal::print_row(at, line_text);
-        debug_assert!(result.is_ok(), "Failed to render line");
+    fn render_line(at: usize, line_text: &str) -> Result<(), Error> {
+        Terminal::print_row(at, line_text)
     }
 
     /// Builds the welcome message for the editor.
@@ -228,7 +158,7 @@ impl View {
     ///
     /// A string containing the welcome message.
     fn build_welcome_message(width: usize) -> String {
-        if (width == 0) {
+        if width == 0 {
             return String::new();
         }
         let welcome_message = format!("{NAME} editor -- version {VERSION}");
@@ -262,7 +192,7 @@ impl View {
             false
         };
         if offset_changed {
-            self.needs_redraw = true;
+            self.mark_redraw(true);
         }
     }
 
@@ -283,7 +213,7 @@ impl View {
             false
         };
         if offset_changed {
-            self.needs_redraw = true;
+            self.mark_redraw(true);
         }
     }
 
@@ -429,4 +359,49 @@ impl View {
         self.text_location.line_index = min(self.text_location.line_index, self.buffer.height());
     }
     // endregion
+}
+
+impl UIComponent for View {
+    fn mark_redraw(&mut self, value: bool) {
+        self.needs_redraw = value;
+    }
+
+    fn needs_redraw(&self) -> bool {
+        self.needs_redraw
+    }
+
+    fn set_size(&mut self, size: Size) {
+        self.size = size;
+        self.scroll_text_location_into_view();
+    }
+
+    fn draw(&mut self, origin_y: usize) -> Result<(), Error> {
+        let Size { height, width } = self.size;
+        let end_y = origin_y.saturating_add(height);
+
+        // we allow this since we don't care if our welcome message is put _exactly_ in the middle.
+        // it's allowed to be a bit too far up or down
+        #[allow(clippy::integer_division)]
+        let top_third = height / 3;
+        let scroll_top = self.scroll_offset.row;
+
+        for current_row in origin_y..end_y {
+            // to get the correct line index, we have to take current_row (the absolute row on screen),
+            // subtract origin_y to get the current row relative to the view (ranging from 0 to self.size.height)
+            // and add the scroll offset.
+            let line_idx = current_row
+                .saturating_sub(origin_y)
+                .saturating_add(scroll_top);
+            if let Some(line) = self.buffer.lines.get(line_idx) {
+                let left = self.scroll_offset.col;
+                let right = self.scroll_offset.col.saturating_add(width);
+                Self::render_line(current_row, &line.get_visible_graphemes(left..right))?;
+            } else if current_row == top_third && self.buffer.is_empty() {
+                Self::render_line(current_row, &Self::build_welcome_message(width))?;
+            } else {
+                Self::render_line(current_row, "~")?;
+            }
+        }
+        Ok(())
+    }
 }

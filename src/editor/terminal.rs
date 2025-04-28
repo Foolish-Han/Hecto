@@ -12,7 +12,7 @@ use crossterm::{
 };
 
 /// Represents the size of the terminal.
-#[derive(Default, Clone, Copy)]
+#[derive(Default, Clone, Copy, Eq, PartialEq)]
 pub struct Size {
     /// The height of the terminal.
     pub height: usize,

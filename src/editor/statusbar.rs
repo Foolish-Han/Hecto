@@ -1,64 +1,19 @@
 use super::{
     DocumentStatus,
     terminal::{Size, Terminal},
+    uicomponent::UIComponent,
 };
+use std::io::Error;
 
 /// Represents the status bar in the editor.
+#[derive(Default)]
 pub struct StatusBar {
     current_status: DocumentStatus,
     needs_redraw: bool,
-    margin_bottom: usize,
-    width: usize,
-    position_y: usize,
-    is_visible: bool,
+    size: Size,
 }
 
 impl StatusBar {
-    /// Creates a new `StatusBar` instance.
-    ///
-    /// # Arguments
-    ///
-    /// * `margin_bottom` - The margin at the bottom of the status bar.
-    ///
-    /// # Returns
-    ///
-    /// A new `StatusBar` instance.
-    pub fn new(margin_bottom: usize) -> Self {
-        let size = Terminal::size().unwrap_or_default();
-        let mut status_bar = Self {
-            current_status: DocumentStatus::default(),
-            needs_redraw: true,
-            margin_bottom,
-            width: size.width,
-            position_y: 0,
-            is_visible: false,
-        };
-        status_bar.resize(size);
-        status_bar
-    }
-
-    /// Resizes the status bar to the specified size.
-    ///
-    /// # Arguments
-    ///
-    /// * `size` - The new size of the status bar.
-    pub fn resize(&mut self, size: Size) {
-        self.width = size.width;
-        let mut position_y = 0;
-        let mut is_visible = false;
-        if let Some(result) = size
-            .height
-            .checked_sub(self.margin_bottom)
-            .and_then(|result| result.checked_sub(1))
-        {
-            position_y = result;
-            is_visible = true;
-        }
-        self.position_y = position_y;
-        self.is_visible = is_visible;
-        self.needs_redraw = true;
-    }
-
     /// Updates the status of the status bar.
     ///
     /// # Arguments
@@ -70,37 +25,44 @@ impl StatusBar {
             self.needs_redraw = true;
         }
     }
+}
 
-    /// Renders the status bar.
-    pub fn render(&mut self) {
-        if !self.needs_redraw || !self.is_visible {
-            return;
-        }
-        if let Ok(size) = Terminal::size() {
-            // Assemble the first part of the status bar
-            let line_count = self.current_status.line_count_to_string();
-            let modified_indicator = self.current_status.modified_indicator_to_string();
+impl UIComponent for StatusBar {
+    fn mark_redraw(&mut self, value: bool) {
+        self.needs_redraw = value;
+    }
 
-            let beginning = format!(
-                "{} - {} {}",
-                self.current_status.file_name, line_count, modified_indicator
-            );
+    fn needs_redraw(&self) -> bool {
+        self.needs_redraw
+    }
 
-            // Assemble the whole status bar, with the position indicator at the back
-            let position_indicator = self.current_status.position_indicator_to_string();
-            let remainder_len = size.width.saturating_sub(beginning.len());
-            let status = format!("{beginning}{position_indicator:>remainder_len$}");
+    fn set_size(&mut self, size: Size) {
+        self.size = size;
+    }
 
-            //Only print out the status if it fits. Otherwise write out an empty string to ensure the row is cleared.
-            let to_print = if status.len() <= size.width {
-                status
-            } else {
-                String::new()
-            };
+    fn draw(&mut self, origin_y: usize) -> Result<(), Error> {
+        // Assemble the first part of the status bar
+        let line_count = self.current_status.line_count_to_string();
+        let modified_indicator = self.current_status.modified_indicator_to_string();
 
-            let result = Terminal::print_inverted_row(self.position_y, &to_print);
-            debug_assert!(result.is_ok(), "Failed to render status bar");
-            self.needs_redraw = false;
-        }
+        let beginning = format!(
+            "{} - {} {}",
+            self.current_status.file_name, line_count, modified_indicator
+        );
+
+        // Assemble the whole status bar, with the position indicator at the back
+        let position_indicator = self.current_status.position_indicator_to_string();
+        let remainder_len = self.size.width.saturating_sub(beginning.len());
+        let status = format!("{beginning}{position_indicator:>remainder_len$}");
+
+        //Only print out the status if it fits. Otherwise write out an empty string to ensure the row is cleared.
+        let to_print = if status.len() <= self.size.width {
+            status
+        } else {
+            String::new()
+        };
+
+        Terminal::print_inverted_row(origin_y, &to_print)?;
+        Ok(())
     }
 }
