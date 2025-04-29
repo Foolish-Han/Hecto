@@ -1,6 +1,6 @@
 use super::{
     DocumentStatus, NAME, VERSION,
-    editorcommand::{Direction, EditorCommand},
+    command::{Edit, Move},
     terminal::{Position, Size, Terminal},
     uicomponent::UIComponent,
 };
@@ -51,37 +51,44 @@ impl View {
     /// # Arguments
     ///
     /// * `file_name` - The name of the file to load.
-    pub fn load(&mut self, file_name: &str) {
-        if let Ok(buffer) = Buffer::load(file_name) {
-            self.buffer = buffer;
-            self.set_needs_redraw(true);
-        }
+    pub fn load(&mut self, file_name: &str) -> Result<(), Error> {
+        let buffer = Buffer::load(file_name)?;
+        self.buffer = buffer;
+        self.set_needs_redraw(true);
+        Ok(())
     }
 
     /// Saves the buffer to a file.
-    pub fn save(&mut self) {
-        let _ = self.buffer.save();
+    pub fn save(&mut self) -> Result<(), Error> {
+        self.buffer.save()
     }
 
     // endregion
 
     // region: command handling
 
-    /// Handles an editor command.
-    ///
-    /// # Arguments
-    ///
-    /// * `command` - The command to handle.
-    pub fn handle_command(&mut self, command: EditorCommand) {
+    pub fn handle_edit_command(&mut self, command: Edit) {
         match command {
-            EditorCommand::Move(direction) => self.move_text_location(direction),
-            EditorCommand::Resize(_) | EditorCommand::Quit => {}
-            EditorCommand::Insert(character) => self.insert_char(character),
-            EditorCommand::Delete => self.delete(),
-            EditorCommand::Backspace => self.delete_backward(),
-            EditorCommand::Enter => self.insert_newline(),
-            EditorCommand::Save => self.save(),
+            Edit::DeleteBackwards => self.delete_backward(),
+            Edit::Delete => self.delete(),
+            Edit::InsertNewline => self.insert_newline(),
+            Edit::Insert(character) => self.insert_char(character),
         }
+    }
+
+    pub fn handle_move_command(&mut self, command: Move) {
+        let Size { height, .. } = self.size;
+        match command {
+            Move::Up => self.move_up(1),
+            Move::Down => self.move_down(1),
+            Move::PageUp => self.move_up(height.saturating_sub(1)),
+            Move::PageDown => self.move_down(height.saturating_sub(1)),
+            Move::Left => self.move_left(),
+            Move::Right => self.move_right(),
+            Move::StartOfLine => self.move_to_start_of_line(),
+            Move::EndOfLine => self.move_to_end_of_line(),
+        }
+        self.scroll_text_location_into_view();
     }
 
     // endregion
@@ -91,14 +98,14 @@ impl View {
     /// Inserts a newline at the current text location.
     fn insert_newline(&mut self) {
         self.buffer.insert_newline(self.text_location);
-        self.move_text_location(Direction::Right);
+        self.handle_move_command(Move::Right);
         self.set_needs_redraw(true);
     }
 
     /// Deletes the character before the current text location.
     fn delete_backward(&mut self) {
         if self.text_location.line_index != 0 || self.text_location.grapheme_index != 0 {
-            self.move_text_location(Direction::Left);
+            self.handle_move_command(Move::Left);
             self.delete();
         }
     }
@@ -129,7 +136,7 @@ impl View {
         let grapheme_delta = new_len.saturating_sub(old_len);
         if grapheme_delta > 0 {
             // move right for an added grapheme (should be the regular case)
-            self.move_text_location(Direction::Right);
+            self.handle_move_command(Move::Right);
         }
         self.set_needs_redraw(true);
     }
@@ -254,28 +261,6 @@ impl View {
     // endregion
 
     // region: text location movement
-
-    /// Moves the text location in the specified direction.
-    ///
-    /// # Arguments
-    ///
-    /// * `direction` - The direction to move the text location.
-    fn move_text_location(&mut self, direction: Direction) {
-        let Size { height, .. } = self.size;
-        // This match moves the positon, but does not check for all boundaries.
-        // The final boundarline checking happens after the match statement.
-        match direction {
-            Direction::Up => self.move_up(1),
-            Direction::Down => self.move_down(1),
-            Direction::Left => self.move_left(),
-            Direction::Right => self.move_right(),
-            Direction::PageUp => self.move_up(height.saturating_sub(1)),
-            Direction::PageDown => self.move_down(height.saturating_sub(1)),
-            Direction::Home => self.move_to_start_of_line(),
-            Direction::End => self.move_to_end_of_line(),
-        }
-        self.scroll_text_location_into_view();
-    }
 
     /// Moves the text location up by the specified number of steps.
     ///
