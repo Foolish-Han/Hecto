@@ -1,5 +1,4 @@
-use super::{Location, line::Line};
-use crate::editor::fileinfo::FileInfo;
+use super::{FileInfo, Line, Location};
 use std::{
     fs::{File, read_to_string},
     io::{Error, Write},
@@ -39,19 +38,32 @@ impl Buffer {
         })
     }
 
+    fn save_to_file(&self, file_info: &FileInfo) -> Result<(), Error> {
+        if let Some(file_path) = &file_info.get_path() {
+            let mut file = File::create(file_path)?;
+            for line in &self.lines {
+                writeln!(file, "{line}")?;
+            }
+        }
+        Ok(())
+    }
+
+    pub fn save_as(&mut self, file_name: &str) -> Result<(), Error> {
+        let file_info = FileInfo::from(file_name);
+        self.save_to_file(&file_info)?;
+        self.file_info = file_info;
+        self.dirty = false;
+        Ok(())
+    }
+
     /// Saves the buffer to a file.
     ///
     /// # Returns
     ///
     /// A result indicating success or failure.
     pub fn save(&mut self) -> Result<(), Error> {
-        if let Some(path) = &self.file_info.path {
-            let mut file = File::create(path)?;
-            for line in &self.lines {
-                writeln!(file, "{line}")?;
-            }
-            self.dirty = false;
-        }
+        self.save_to_file(&self.file_info)?;
+        self.dirty = false;
         Ok(())
     }
 
@@ -62,6 +74,10 @@ impl Buffer {
     /// `true` if the buffer is empty, `false` otherwise.
     pub fn is_empty(&self) -> bool {
         self.lines.is_empty()
+    }
+
+    pub const fn is_file_loaded(&self) -> bool {
+        self.file_info.has_path()
     }
 
     /// Returns the height of the buffer (number of lines).

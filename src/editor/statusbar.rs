@@ -1,8 +1,4 @@
-use super::{
-    DocumentStatus,
-    terminal::{Size, Terminal},
-    uicomponent::UIComponent,
-};
+use super::{DocumentStatus, Size, Terminal, UIComponent};
 use std::io::Error;
 
 /// Represents the status bar in the editor.
@@ -40,7 +36,7 @@ impl UIComponent for StatusBar {
         self.size = size;
     }
 
-    fn draw(&mut self, origin_y: usize) -> Result<(), Error> {
+    fn draw(&mut self, origin_row: usize) -> Result<(), Error> {
         // Assemble the first part of the status bar
         let line_count = self.current_status.line_count_to_string();
         let modified_indicator = self.current_status.modified_indicator_to_string();
@@ -62,7 +58,7 @@ impl UIComponent for StatusBar {
             String::new()
         };
 
-        Terminal::print_inverted_row(origin_y, &to_print)?;
+        Terminal::print_inverted_row(origin_row, &to_print)?;
         Ok(())
     }
 }
