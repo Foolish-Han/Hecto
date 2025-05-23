@@ -299,8 +299,19 @@ impl Editor {
     // region search command & prompt handling
     fn process_command_during_search(&mut self, command: Command) {
         match command {
-            System(Dismiss) | Edit(InsertNewline) => self.set_prompt(PromptType::None),
-            Edit(command) => self.command_bar.handle_edit_command(command),
+            System(Dismiss) => {
+                self.set_prompt(PromptType::None);
+                self.view.dismiss_search();
+            }
+            Edit(InsertNewline) => {
+                self.set_prompt(PromptType::None);
+                self.view.exit_search();
+            }
+            Edit(edit_command) => {
+                self.command_bar.handle_edit_command(edit_command);
+                let query = self.command_bar.value();
+                self.view.search(&query);
+            }
             _ => {}
         }
     }
@@ -320,7 +331,10 @@ impl Editor {
     fn set_prompt(&mut self, prompt_type: PromptType) {
         match prompt_type {
             PromptType::Save => self.command_bar.set_prompt("Save as: "),
-            PromptType::Search => self.command_bar.set_prompt("Search: "),
+            PromptType::Search => {
+                self.view.enter_search();
+                self.command_bar.set_prompt("Search (Esc to cancel): ");
+            }
             PromptType::None => self.message_bar.set_needs_redraw(true),
         }
         self.command_bar.clear_value();
