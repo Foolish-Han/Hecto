@@ -1,10 +1,12 @@
+pub type Row = usize;
+pub type Col = usize;
 /// Represents a position in the terminal.
 #[derive(Clone, Copy, Default)]
 pub struct Position {
     /// The column position.
-    pub col: usize,
+    pub col: Col,
     /// The row position.
-    pub row: usize,
+    pub row: Row,
 }
 
 impl Position {

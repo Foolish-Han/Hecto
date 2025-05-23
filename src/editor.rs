@@ -21,13 +21,14 @@ use self::{
     command::{
         Command::{self, Edit, Move, System},
         Edit::InsertNewline,
+        Move::{Down, Right},
         System::{Dismiss, Quit, Resize, Save, Search},
     },
     commandbar::CommandBar,
     documentstatus::DocumentStatus,
     line::Line,
     messagebar::MessageBar,
-    position::Position,
+    position::{Col, Position, Row},
     size::Size,
     statusbar::StatusBar,
     terminal::Terminal,
@@ -312,6 +313,9 @@ impl Editor {
                 let query = self.command_bar.value();
                 self.view.search(&query);
             }
+            Move(Right | Down) => {
+                self.view.search_next();
+            }
             _ => {}
         }
     }
@@ -333,7 +337,8 @@ impl Editor {
             PromptType::Save => self.command_bar.set_prompt("Save as: "),
             PromptType::Search => {
                 self.view.enter_search();
-                self.command_bar.set_prompt("Search (Esc to cancel): ");
+                self.command_bar
+                    .set_prompt("Search (Esc to cancel, Arrows to navigate): ");
             }
             PromptType::None => self.message_bar.set_needs_redraw(true),
         }

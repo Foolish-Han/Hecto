@@ -4,7 +4,7 @@ pub struct DocumentStatus {
     /// The total number of lines in the document.
     pub total_lines: usize,
     /// The current line index in the document.
-    pub current_line_index: usize,
+    pub current_line_idx: usize,
     /// Indicates whether the document has been modified.
     pub is_modified: bool,
     /// The name of the file associated with the document.
@@ -30,7 +30,7 @@ impl DocumentStatus {
     pub fn position_indicator_to_string(&self) -> String {
         format!(
             "{}/{}",
-            self.current_line_index.saturating_add(1),
+            self.current_line_idx.saturating_add(1),
             self.total_lines
         )
     }
