@@ -13,6 +13,10 @@ pub struct DocumentStatus {
 
 impl DocumentStatus {
     /// Returns a string indicating whether the document has been modified.
+    ///
+    /// # Returns
+    ///
+    /// A string indicating whether the document has been modified.
     pub fn modified_indicator_to_string(&self) -> String {
         if self.is_modified {
             String::from("(modified)")
@@ -22,11 +26,19 @@ impl DocumentStatus {
     }
 
     /// Returns a string representing the total number of lines in the document.
+    ///
+    /// # Returns
+    ///
+    /// A string representing the total number of lines in the document.
     pub fn line_count_to_string(&self) -> String {
         format!("{} lines", self.total_lines)
     }
 
     /// Returns a string representing the current position in the document.
+    ///
+    /// # Returns
+    ///
+    /// A string representing the current position in the document.
     pub fn position_indicator_to_string(&self) -> String {
         format!(
             "{}/{}",

@@ -9,6 +9,9 @@
 mod editor;
 use editor::Editor;
 
+/// The main entry point of the application.
+///
+/// This function initializes and runs the editor.
 fn main() {
     Editor::new().unwrap().run();
 }

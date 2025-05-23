@@ -40,12 +40,18 @@ impl View {
         }
     }
 
+    /// Checks if a file is loaded in the buffer.
+    ///
+    /// # Returns
+    ///
+    /// `true` if a file is loaded, `false` otherwise.
     pub const fn is_file_loaded(&self) -> bool {
         self.buffer.is_file_loaded()
     }
 
     // region: search
 
+    /// Enters search mode.
     pub fn enter_search(&mut self) {
         self.search_info = Some(SearchInfo {
             prev_location: self.text_location,
@@ -54,10 +60,12 @@ impl View {
         });
     }
 
+    /// Exits search mode.
     pub fn exit_search(&mut self) {
         self.search_info = None;
     }
 
+    /// Dismisses the current search and restores the previous state.
     pub fn dismiss_search(&mut self) {
         if let Some(search_info) = &self.search_info {
             self.text_location = search_info.prev_location;
@@ -67,6 +75,11 @@ impl View {
         self.search_info = None;
     }
 
+    /// Performs a search for the given query.
+    ///
+    /// # Arguments
+    ///
+    /// * `query` - The query string to search for.
     pub fn search(&mut self, query: &str) {
         if query.is_empty() {
             return;
@@ -77,6 +90,11 @@ impl View {
         self.search_from(self.text_location);
     }
 
+    /// Performs a search starting from the specified location.
+    ///
+    /// # Arguments
+    ///
+    /// * `from` - The location to start the search from.
     fn search_from(&mut self, from: Location) {
         if let Some(searchinfo) = self.search_info.as_ref() {
             let query = &searchinfo.query;
@@ -95,6 +113,7 @@ impl View {
         }
     }
 
+    /// Searches for the next occurrence of the query.
     pub fn search_next(&mut self) {
         let step_right;
         if let Some(search_info) = self.search_info.as_ref() {
@@ -137,6 +156,11 @@ impl View {
         self.buffer.save()
     }
 
+    /// Saves the buffer to a new file.
+    ///
+    /// # Arguments
+    ///
+    /// * `file_name` - The name of the new file.
     pub fn save_as(&mut self, file_name: &str) -> Result<(), Error> {
         self.buffer.save_as(file_name)
     }
@@ -145,6 +169,11 @@ impl View {
 
     // region: command handling
 
+    /// Handles an edit command.
+    ///
+    /// # Arguments
+    ///
+    /// * `command` - The edit command to handle.
     pub fn handle_edit_command(&mut self, command: Edit) {
         match command {
             Edit::DeleteBackwards => self.delete_backward(),
@@ -154,6 +183,11 @@ impl View {
         }
     }
 
+    /// Handles a move command.
+    ///
+    /// # Arguments
+    ///
+    /// * `command` - The move command to handle.
     pub fn handle_move_command(&mut self, command: Move) {
         let Size { height, .. } = self.size;
         match command {
@@ -250,7 +284,7 @@ impl View {
         let len = welcome_message.len();
         let remaining_width = width.saturating_sub(1);
         // hide the welcome message if it doesn't fit entirely.
-        if remaining_width < len {
+        if (remaining_width < len) {
             return "~".to_string();
         }
         format!("{:1<}{:^remaining_width$}", "~", welcome_message)
@@ -302,6 +336,7 @@ impl View {
         }
     }
 
+    /// Centers the text location in the view.
     fn center_text_location(&mut self) {
         let Size { height, width } = self.size;
         let Position { col, row } = self.text_location_to_position();

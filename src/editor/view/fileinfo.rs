@@ -26,10 +26,20 @@ impl FileInfo {
         }
     }
 
+    /// Returns the path to the file.
+    ///
+    /// # Returns
+    ///
+    /// An option containing the path to the file, or `None` if no path is set.
     pub fn get_path(&self) -> Option<&Path> {
         self.path.as_deref()
     }
 
+    /// Checks if the file has a path.
+    ///
+    /// # Returns
+    ///
+    /// `true` if the file has a path, `false` otherwise.
     pub const fn has_path(&self) -> bool {
         self.path.is_some()
     }

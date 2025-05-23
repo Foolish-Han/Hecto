@@ -109,6 +109,7 @@ impl Line {
             .collect()
     }
 
+    /// Rebuilds the text fragments from the current string.
     fn rebuild_fragments(&mut self) {
         self.fragments = Self::str_to_fragments(&self.string);
     }
@@ -205,11 +206,15 @@ impl Line {
             .sum()
     }
 
+    /// Returns the width of the entire line.
+    ///
+    /// # Returns
+    ///
+    /// The width of the line.
     pub fn width(&self) -> GraphemeIdx {
         self.width_until(self.grapheme_count())
     }
 
-    // Inserts  a character into the line, or appends it at the end if at > the len of the string
     /// Inserts a character at the specified grapheme index.
     ///
     /// # Arguments
@@ -225,6 +230,11 @@ impl Line {
         self.rebuild_fragments();
     }
 
+    /// Appends a character to the end of the line.
+    ///
+    /// # Arguments
+    ///
+    /// * `character` - The character to append.
     pub fn append_char(&mut self, character: char) {
         self.insert_char(character, self.grapheme_count());
     }
@@ -243,9 +253,11 @@ impl Line {
         }
     }
 
+    /// Deletes the last grapheme in the line.
     pub fn delete_last(&mut self) {
         self.delete(self.grapheme_count().saturating_sub(1));
     }
+
     /// Appends another line to this line.
     ///
     /// # Arguments
@@ -275,6 +287,15 @@ impl Line {
         }
     }
 
+    /// Converts a byte index to a grapheme index.
+    ///
+    /// # Arguments
+    ///
+    /// * `byte_idx` - The byte index to convert.
+    ///
+    /// # Returns
+    ///
+    /// The corresponding grapheme index.
     fn byte_idx_to_grapheme_idx(&self, byte_idx: ByteIdx) -> GraphemeIdx {
         self.fragments
             .iter()
@@ -282,11 +303,31 @@ impl Line {
             .map_or(0, |grapheme_idx| grapheme_idx)
     }
 
+    /// Converts a grapheme index to a byte index.
+    ///
+    /// # Arguments
+    ///
+    /// * `grapheme_index` - The grapheme index to convert.
+    ///
+    /// # Returns
+    ///
+    /// The corresponding byte index.
     fn grapheme_idx_to_byte_idx(&self, grapheme_index: GraphemeIdx) -> ByteIdx {
         self.fragments
             .get(grapheme_index)
             .map_or(0, |fragment| fragment.start_byte_idx)
     }
+
+    /// Searches for a query string starting from a given grapheme index.
+    ///
+    /// # Arguments
+    ///
+    /// * `query` - The query string to search for.
+    /// * `from_grapheme_idx` - The grapheme index to start the search from.
+    ///
+    /// # Returns
+    ///
+    /// An option containing the grapheme index of the query string, or `None` if not found.
     pub fn search(&self, query: &str, from_grapheme_idx: GraphemeIdx) -> Option<GraphemeIdx> {
         let start_byte_idx = self.grapheme_idx_to_byte_idx(from_grapheme_idx);
         self.string

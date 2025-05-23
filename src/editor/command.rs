@@ -10,6 +10,7 @@ use std::{convert::TryFrom, usize};
 
 use super::Size;
 
+/// Represents movement commands in the editor.
 #[derive(Clone, Copy)]
 pub enum Move {
     PageUp,
@@ -25,6 +26,15 @@ pub enum Move {
 impl TryFrom<KeyEvent> for Move {
     type Error = String;
 
+    /// Converts a `KeyEvent` into a `Move` command.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The `KeyEvent` to convert.
+    ///
+    /// # Returns
+    ///
+    /// A `Result` containing the `Move` command or an error message.
     fn try_from(value: KeyEvent) -> Result<Self, Self::Error> {
         let KeyEvent {
             code, modifiers, ..
@@ -49,6 +59,7 @@ impl TryFrom<KeyEvent> for Move {
     }
 }
 
+/// Represents editing commands in the editor.
 #[derive(Clone, Copy)]
 pub enum Edit {
     Insert(char),
@@ -60,6 +71,15 @@ pub enum Edit {
 impl TryFrom<KeyEvent> for Edit {
     type Error = String;
 
+    /// Converts a `KeyEvent` into an `Edit` command.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The `KeyEvent` to convert.
+    ///
+    /// # Returns
+    ///
+    /// A `Result` containing the `Edit` command or an error message.
     fn try_from(value: KeyEvent) -> Result<Self, Self::Error> {
         match (value.code, value.modifiers) {
             (Char(character), KeyModifiers::NONE | KeyModifiers::SHIFT) => {
@@ -77,6 +97,7 @@ impl TryFrom<KeyEvent> for Edit {
     }
 }
 
+/// Represents system commands in the editor.
 #[derive(Clone, Copy)]
 pub enum System {
     Resize(Size),
@@ -89,6 +110,15 @@ pub enum System {
 impl TryFrom<KeyEvent> for System {
     type Error = String;
 
+    /// Converts a `KeyEvent` into a `System` command.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The `KeyEvent` to convert.
+    ///
+    /// # Returns
+    ///
+    /// A `Result` containing the `System` command or an error message.
     fn try_from(value: KeyEvent) -> Result<Self, Self::Error> {
         let KeyEvent {
             code, modifiers, ..
@@ -111,6 +141,7 @@ impl TryFrom<KeyEvent> for System {
     }
 }
 
+/// Represents all possible commands in the editor.
 #[derive(Clone, Copy)]
 pub enum Command {
     Move(Move),
@@ -121,6 +152,15 @@ pub enum Command {
 impl TryFrom<Event> for Command {
     type Error = String;
 
+    /// Converts an `Event` into a `Command`.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The `Event` to convert.
+    ///
+    /// # Returns
+    ///
+    /// A `Result` containing the `Command` or an error message.
     fn try_from(value: Event) -> Result<Self, Self::Error> {
         match value {
             Event::Key(key_event) => Edit::try_from(key_event)

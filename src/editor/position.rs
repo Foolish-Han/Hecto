@@ -1,5 +1,6 @@
 pub type Row = usize;
 pub type Col = usize;
+
 /// Represents a position in the terminal.
 #[derive(Clone, Copy, Default)]
 pub struct Position {

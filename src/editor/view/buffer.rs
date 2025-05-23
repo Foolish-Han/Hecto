@@ -38,6 +38,16 @@ impl Buffer {
         })
     }
 
+    /// Searches for a query string starting from a given location.
+    ///
+    /// # Arguments
+    ///
+    /// * `query` - The query string to search for.
+    /// * `from` - The location to start the search from.
+    ///
+    /// # Returns
+    ///
+    /// An option containing the location of the query string, or `None` if not found.
     pub fn search(&self, query: &str, from: Location) -> Option<Location> {
         for (line_idx, line) in self.lines.iter().enumerate().skip(from.line_idx) {
             let from_grapheme_idx = if line_idx == from.line_idx {
@@ -63,6 +73,15 @@ impl Buffer {
         None
     }
 
+    /// Saves the buffer to a file.
+    ///
+    /// # Arguments
+    ///
+    /// * `file_info` - The file information to save the buffer to.
+    ///
+    /// # Returns
+    ///
+    /// A result indicating success or failure.
     fn save_to_file(&self, file_info: &FileInfo) -> Result<(), Error> {
         if let Some(file_path) = &file_info.get_path() {
             let mut file = File::create(file_path)?;
@@ -73,6 +92,15 @@ impl Buffer {
         Ok(())
     }
 
+    /// Saves the buffer to a new file.
+    ///
+    /// # Arguments
+    ///
+    /// * `file_name` - The name of the new file.
+    ///
+    /// # Returns
+    ///
+    /// A result indicating success or failure.
     pub fn save_as(&mut self, file_name: &str) -> Result<(), Error> {
         let file_info = FileInfo::from(file_name);
         self.save_to_file(&file_info)?;
@@ -101,6 +129,11 @@ impl Buffer {
         self.lines.is_empty()
     }
 
+    /// Checks if a file is loaded in the buffer.
+    ///
+    /// # Returns
+    ///
+    /// `true` if a file is loaded, `false` otherwise.
     pub const fn is_file_loaded(&self) -> bool {
         self.file_info.has_path()
     }

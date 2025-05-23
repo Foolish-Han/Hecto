@@ -7,8 +7,11 @@ use super::{Size, Terminal, UIComponent};
 
 const DEFAULT_DURATION: Duration = Duration::new(5, 0);
 
+/// Represents a message to be displayed in the message bar.
 struct Message {
+    /// The text of the message.
     text: String,
+    /// The time the message was created.
     time: Instant,
 }
 
@@ -22,19 +25,33 @@ impl Default for Message {
 }
 
 impl Message {
+    /// Checks if the message has expired.
+    ///
+    /// # Returns
+    ///
+    /// `true` if the message has expired, `false` otherwise.
     fn is_expired(&self) -> bool {
         Instant::now().duration_since(self.time) > DEFAULT_DURATION
     }
 }
 
+/// Represents the message bar in the editor.
 #[derive(Default)]
 pub struct MessageBar {
+    /// The current message being displayed.
     current_message: Message,
+    /// Indicates whether the message bar needs to be redrawn.
     needs_redraw: bool,
+    /// Indicates whether the message bar was cleared after the message expired.
     cleared_after_expiry: bool,
 }
 
 impl MessageBar {
+    /// Updates the message displayed in the message bar.
+    ///
+    /// # Arguments
+    ///
+    /// * `new_message` - The new message to display.
     pub fn update_message(&mut self, new_message: &str) {
         self.current_message = Message {
             text: new_message.to_string(),

@@ -36,6 +36,15 @@ impl UIComponent for StatusBar {
         self.size = size;
     }
 
+    /// Draws the status bar at the specified row.
+    ///
+    /// # Arguments
+    ///
+    /// * `origin_row` - The row to draw the status bar at.
+    ///
+    /// # Returns
+    ///
+    /// A result indicating success or failure.
     fn draw(&mut self, origin_row: usize) -> Result<(), Error> {
         // Assemble the first part of the status bar
         let line_count = self.current_status.line_count_to_string();
