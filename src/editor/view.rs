@@ -13,6 +13,13 @@ use fileinfo::FileInfo;
 use location::Location;
 use searchinfo::SearchInfo;
 
+#[derive(Default, Eq, PartialEq, Clone, Copy)]
+pub enum SearchDirection {
+    #[default]
+    Forward,
+    Backward,
+}
+
 /// Represents the view of the text buffer.
 #[derive(Default)]
 pub struct View {
@@ -56,7 +63,7 @@ impl View {
         self.search_info = Some(SearchInfo {
             prev_location: self.text_location,
             prev_scroll_offset: self.scroll_offset,
-            query: Line::default(),
+            query: None,
         });
     }
 
@@ -70,7 +77,7 @@ impl View {
         if let Some(search_info) = &self.search_info {
             self.text_location = search_info.prev_location;
             self.scroll_offset = search_info.prev_scroll_offset;
-            self.needs_redraw = true;
+            self.scroll_text_location_into_view();
         }
         self.search_info = None;
     }
@@ -85,9 +92,22 @@ impl View {
             return;
         }
         if let Some(search_info) = &mut self.search_info {
-            search_info.query = Line::from(query);
+            search_info.query = Some(Line::from(query));
         }
-        self.search_from(self.text_location);
+        self.search_in_direction(self.text_location, SearchDirection::default());
+    }
+
+    fn get_search_query(&self) -> Option<&Line> {
+        let query = self
+            .search_info
+            .as_ref()
+            .and_then(|search_info| search_info.query.as_ref());
+
+        debug_assert!(
+            query.is_some(),
+            "Attempting to search with malformed searchinfo present"
+        );
+        query
     }
 
     /// Performs a search starting from the specified location.
@@ -95,44 +115,35 @@ impl View {
     /// # Arguments
     ///
     /// * `from` - The location to start the search from.
-    fn search_from(&mut self, from: Location) {
-        if let Some(searchinfo) = self.search_info.as_ref() {
-            let query = &searchinfo.query;
+    fn search_in_direction(&mut self, from: Location, direction: SearchDirection) {
+        if let Some(location) = self.get_search_query().and_then(|query| {
             if query.is_empty() {
-                return;
+                None
+            } else if direction == SearchDirection::Forward {
+                self.buffer.search_forward(query, from)
+            } else {
+                self.buffer.search_backward(query, from)
             }
-            if let Some(location) = self.buffer.search(query, from) {
-                self.text_location = location;
-                self.center_text_location();
-            }
-        } else {
-            #[cfg(debug_assertions)]
-            {
-                panic!("Attempting to search without search_info");
-            }
+        }) {
+            self.text_location = location;
+            self.center_text_location();
         }
     }
 
     /// Searches for the next occurrence of the query.
     pub fn search_next(&mut self) {
-        let step_right;
-        if let Some(search_info) = self.search_info.as_ref() {
-            step_right = min(search_info.query.grapheme_count(), 1);
-        } else {
-            #[cfg(debug_assertions)]
-            {
-                panic!("Attempting to search_next without search_info");
-            }
-            #[cfg(not(debug_assertions))]
-            {
-                return;
-            }
-        }
+        let step_right = self
+            .get_search_query()
+            .map_or(1, |query| min(query.grapheme_count(), 1));
         let location = Location {
             line_idx: self.text_location.line_idx,
             grapheme_idx: self.text_location.grapheme_idx.saturating_add(step_right),
         };
-        self.search_from(location);
+        self.search_in_direction(location, SearchDirection::Forward);
+    }
+
+    pub fn search_prev(&mut self) {
+        self.search_in_direction(self.text_location, SearchDirection::Backward);
     }
 
     // endregion
@@ -284,7 +295,7 @@ impl View {
         let len = welcome_message.len();
         let remaining_width = width.saturating_sub(1);
         // hide the welcome message if it doesn't fit entirely.
-        if (remaining_width < len) {
+        if remaining_width < len {
             return "~".to_string();
         }
         format!("{:1<}{:^remaining_width$}", "~", welcome_message)
@@ -375,6 +386,7 @@ impl View {
     /// A `Position` instance representing the position of the text location.
     fn text_location_to_position(&self) -> Position {
         let row = self.text_location.line_idx;
+        debug_assert!(row.saturating_sub(1) <= self.buffer.lines.len());
         let col = self
             .buffer
             .lines

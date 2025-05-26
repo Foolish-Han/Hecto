@@ -9,5 +9,5 @@ pub struct SearchInfo {
     /// The previous scroll offset before the search.
     pub prev_scroll_offset: Position,
     /// The query string for the search.
-    pub query: Line,
+    pub query: Option<Line>,
 }

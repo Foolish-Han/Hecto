@@ -21,7 +21,7 @@ use self::{
     command::{
         Command::{self, Edit, Move, System},
         Edit::InsertNewline,
-        Move::{Down, Right},
+        Move::{Down, Left, Right, Up},
         System::{Dismiss, Quit, Resize, Save, Search},
     },
     commandbar::CommandBar,
@@ -90,6 +90,7 @@ impl Editor {
 
         let args: Vec<String> = env::args().collect();
         if let Some(file_name) = args.get(1) {
+            debug_assert!(!file_name.is_empty());
             if editor.view.load(file_name).is_err() {
                 editor.update_message(&format!("Could not open file: {file_name}"));
             }
@@ -114,6 +115,10 @@ impl Editor {
                     #[cfg(debug_assertions)]
                     {
                         panic!("Could not read event: {err:?}");
+                    }
+                    #[cfg(not(debug_assertions))]
+                    {
+                        let _ = err;
                     }
                 }
             }
@@ -148,6 +153,9 @@ impl Editor {
         } else {
             self.view.caret_position()
         };
+
+        debug_assert!(new_caret_pos.col <= self.terminal_size.width);
+        debug_assert!(new_caret_pos.row <= self.terminal_size.height);
 
         let _ = Terminal::move_caret_to(new_caret_pos);
         let _ = Terminal::show_caret();
@@ -315,6 +323,9 @@ impl Editor {
             }
             Move(Right | Down) => {
                 self.view.search_next();
+            }
+            Move(Up | Left) => {
+                self.view.search_prev();
             }
             _ => {}
         }
