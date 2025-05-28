@@ -1,6 +1,6 @@
-use super::{
-    Col, DocumentStatus, Line, NAME, Position, Row, Size, Terminal, UIComponent, VERSION,
-    command::{Edit, Move},
+use crate::editor::{
+    command::{Edit, Move}, Col, DocumentStatus, Line, Position, Row, Size, Terminal, UIComponent, NAME,
+    VERSION,
 };
 use std::{cmp::min, io::Error, usize};
 mod buffer;
