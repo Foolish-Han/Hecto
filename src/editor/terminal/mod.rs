@@ -1,11 +1,16 @@
-use super::{Position, Size};
+mod attribute;
+use super::{AnnotatedString, Position, Size};
+use attribute::Attribute;
 use std::io::{Error, Write, stdout};
 
 use crossterm::{
     Command,
     cursor::{Hide, MoveTo, Show},
     queue,
-    style::{Attribute, Print},
+    style::{
+        Attribute::{Reset, Reverse},
+        Print, ResetColor, SetBackgroundColor, SetForegroundColor,
+    },
     terminal::{
         Clear, ClearType, DisableLineWrap, EnableLineWrap, EnterAlternateScreen,
         LeaveAlternateScreen, SetTitle, disable_raw_mode, enable_raw_mode, size,
@@ -185,6 +190,41 @@ impl Terminal {
         Ok(())
     }
 
+    pub fn print_annotated_row(
+        row: usize,
+        annotated_string: &AnnotatedString,
+    ) -> Result<(), Error> {
+        Self::move_caret_to(Position { col: 0, row })?;
+        Self::clear_line()?;
+        annotated_string
+            .into_iter()
+            .try_for_each(|part| -> Result<(), Error> {
+                if let Some(annotation_type) = part.annotation_type {
+                    let attribute: Attribute = annotation_type.into();
+                    Self::set_attribure(&attribute)?;
+                }
+                Self::print(part.string)?;
+                Self::reset_color()?;
+                Ok(())
+            })?;
+        Ok(())
+    }
+
+    fn set_attribure(attribute: &Attribute) -> Result<(), Error> {
+        if let Some(foreground_color) = attribute.foreground {
+            Self::queue_command(SetForegroundColor(foreground_color))?;
+        }
+        if let Some(background_color) = attribute.background {
+            Self::queue_command(SetBackgroundColor(background_color))?;
+        }
+        Ok(())
+    }
+
+    fn reset_color() -> Result<(), Error> {
+        Self::queue_command(ResetColor)?;
+        Ok(())
+    }
+
     /// Prints an inverted row of text at the specified position.
     ///
     /// # Arguments
@@ -199,12 +239,7 @@ impl Terminal {
         let width = Self::size()?.width;
         Self::print_row(
             row,
-            &format!(
-                "{}{:width$.width$}{}",
-                Attribute::Reverse,
-                line_text,
-                Attribute::Reset
-            ),
+            &format!("{Reverse}{:width$.width$}{Reset}", line_text,),
         )
     }
 

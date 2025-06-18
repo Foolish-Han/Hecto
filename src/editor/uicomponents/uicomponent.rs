@@ -1,6 +1,6 @@
 use std::io::Error;
 
-use super::Size;
+use super::super::Size;
 
 /// A trait representing a UI component in the editor.
 pub trait UIComponent {

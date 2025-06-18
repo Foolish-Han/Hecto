@@ -1,4 +1,4 @@
-use super::{DocumentStatus, Size, Terminal, UIComponent};
+use super::{super::{DocumentStatus, Size, Terminal}, UIComponent};
 use std::io::Error;
 
 /// Represents the status bar in the editor.

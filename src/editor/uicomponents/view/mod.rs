@@ -1,25 +1,23 @@
-use crate::editor::{
-    command::{Edit, Move}, Col, DocumentStatus, Line, Position, Row, Size, Terminal, UIComponent, NAME,
-    VERSION,
+use super::{
+    super::{
+        Col, DocumentStatus, Line, NAME, Position, Row, Size, Terminal, VERSION,
+        command::{Edit, Move},
+    },
+    uicomponent::UIComponent,
 };
-use std::{cmp::min, io::Error, usize};
 mod buffer;
 mod fileinfo;
 mod location;
+mod searchdirection;
 mod searchinfo;
 
 use buffer::Buffer;
 use fileinfo::FileInfo;
 use location::Location;
+use searchdirection::SearchDirection;
 use searchinfo::SearchInfo;
 
-#[derive(Default, Eq, PartialEq, Clone, Copy)]
-pub enum SearchDirection {
-    #[default]
-    Forward,
-    Backward,
-}
-
+use std::{cmp::min, io::Error, usize};
 /// Represents the view of the text buffer.
 #[derive(Default)]
 pub struct View {
@@ -70,6 +68,7 @@ impl View {
     /// Exits search mode.
     pub fn exit_search(&mut self) {
         self.search_info = None;
+        self.set_needs_redraw(true);
     }
 
     /// Dismisses the current search and restores the previous state.
@@ -80,6 +79,7 @@ impl View {
             self.scroll_text_location_into_view();
         }
         self.search_info = None;
+        self.set_needs_redraw(true);
     }
 
     /// Performs a search for the given query.
@@ -128,6 +128,7 @@ impl View {
             self.text_location = location;
             self.center_text_location();
         }
+        self.set_needs_redraw(true);
     }
 
     /// Searches for the next occurrence of the query.
@@ -500,7 +501,6 @@ impl UIComponent for View {
     fn draw(&mut self, origin_row: usize) -> Result<(), Error> {
         let Size { height, width } = self.size;
         let end_y = origin_row.saturating_add(height);
-
         let top_third = height.div_ceil(3);
         let scroll_top = self.scroll_offset.row;
 
@@ -514,7 +514,16 @@ impl UIComponent for View {
             if let Some(line) = self.buffer.lines.get(line_idx) {
                 let left = self.scroll_offset.col;
                 let right = self.scroll_offset.col.saturating_add(width);
-                Self::render_line(current_row, &line.get_visible_graphemes(left..right))?;
+                let query = self
+                    .search_info
+                    .as_ref()
+                    .and_then(|search_info| search_info.query.as_deref());
+                let selected_match = (self.text_location.line_idx == line_idx && query.is_some())
+                    .then_some(self.text_location.grapheme_idx);
+                Terminal::print_annotated_row(
+                    current_row,
+                    &line.get_annotated_visible_substr(left..right, query, selected_match),
+                )?;
             } else if current_row == top_third && self.buffer.is_empty() {
                 Self::render_line(current_row, &Self::build_welcome_message(width))?;
             } else {

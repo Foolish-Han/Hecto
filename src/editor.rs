@@ -6,34 +6,29 @@ use std::{
 };
 
 mod command;
-mod commandbar;
 mod documentstatus;
 mod line;
-mod messagebar;
 mod position;
 mod size;
-mod statusbar;
 mod terminal;
-mod uicomponent;
-mod view;
+mod uicomponents;
+
+mod annotatedstring;
 
 use self::{
+    annotatedstring::{AnnotatedString, AnnotationType},
     command::{
         Command::{self, Edit, Move, System},
         Edit::InsertNewline,
         Move::{Down, Left, Right, Up},
         System::{Dismiss, Quit, Resize, Save, Search},
     },
-    commandbar::CommandBar,
     documentstatus::DocumentStatus,
     line::Line,
-    messagebar::MessageBar,
     position::{Col, Position, Row},
     size::Size,
-    statusbar::StatusBar,
     terminal::Terminal,
-    uicomponent::UIComponent,
-    view::View,
+    uicomponents::{CommandBar, MessageBar, StatusBar, UIComponent, View},
 };
 
 /// The name of the editor, retrieved from the environment.
@@ -79,7 +74,7 @@ impl Editor {
         let current_hook = take_hook();
         set_hook(Box::new(move |panic_info| {
             let _ = Terminal::terminate();
-            current_hook(panic_info)
+            current_hook(panic_info);
         }));
         Terminal::initialize()?;
 
@@ -220,7 +215,7 @@ impl Editor {
             System(Save) => self.handle_save_command(),
             Edit(edit_command) => self.view.handle_edit_command(edit_command),
             Move(move_command) => self.view.handle_move_command(move_command),
-            _ => {}
+            System(_) => {}
         }
     }
     // endregion

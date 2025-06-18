@@ -1,6 +1,7 @@
 use std::{cmp::min, io::Error};
 
-use super::{Line, Size, Terminal, UIComponent, command::Edit};
+use super::{super::{command::Edit, Line, Size, Terminal}, UIComponent};
+
 
 /// Represents the command bar in the editor.
 #[derive(Default)]
