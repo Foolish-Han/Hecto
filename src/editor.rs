@@ -1,9 +1,11 @@
-use crossterm::event::{Event, KeyEvent, KeyEventKind, read};
 use std::{
     env,
     io::Error,
     panic::{set_hook, take_hook},
 };
+
+use crossterm::event::{Event, KeyEvent, KeyEventKind, read};
+mod annotatedstring;
 mod command;
 mod documentstatus;
 mod line;
@@ -11,7 +13,6 @@ mod position;
 mod size;
 mod terminal;
 mod uicomponents;
-mod annotatedstring;
 use self::{
     annotatedstring::{AnnotatedString, AnnotationType},
     command::{
@@ -93,7 +94,7 @@ impl Editor {
                     {
                         let _ = err;
                     }
-                }
+                },
             }
             self.refresh_status();
         }
@@ -172,7 +173,7 @@ impl Editor {
             System(Save) => self.handle_save_command(),
             Edit(edit_command) => self.view.handle_edit_command(edit_command),
             Move(move_command) => self.view.handle_move_command(move_command),
-            System(_) => {}
+            System(_) => {},
         }
     }
     fn handle_resize_command(&mut self, size: Size) {
@@ -219,14 +220,14 @@ impl Editor {
             System(Dismiss) => {
                 self.set_prompt(PromptType::None);
                 self.update_message("Save aborted.");
-            }
+            },
             Edit(InsertNewline) => {
                 let file_name = self.command_bar.value();
                 self.save(Some(&file_name));
                 self.set_prompt(PromptType::None);
-            }
+            },
             Edit(edit_command) => self.command_bar.handle_edit_command(edit_command),
-            _ => {}
+            _ => {},
         }
     }
     fn save(&mut self, file_name: Option<&str>) {
@@ -246,23 +247,23 @@ impl Editor {
             System(Dismiss) => {
                 self.set_prompt(PromptType::None);
                 self.view.dismiss_search();
-            }
+            },
             Edit(InsertNewline) => {
                 self.set_prompt(PromptType::None);
                 self.view.exit_search();
-            }
+            },
             Edit(edit_command) => {
                 self.command_bar.handle_edit_command(edit_command);
                 let query = self.command_bar.value();
                 self.view.search(&query);
-            }
+            },
             Move(Right | Down) => {
                 self.view.search_next();
-            }
+            },
             Move(Up | Left) => {
                 self.view.search_prev();
-            }
-            _ => {}
+            },
+            _ => {},
         }
     }
     fn update_message(&mut self, new_message: &str) {
@@ -278,7 +279,7 @@ impl Editor {
                 self.view.enter_search();
                 self.command_bar
                     .set_prompt("Search (Esc to cancel, Arrows to navigate): ");
-            }
+            },
             PromptType::None => self.message_bar.set_needs_redraw(true),
         }
         self.command_bar.clear_value();

@@ -1,4 +1,5 @@
 use std::io::Error;
+
 use super::super::Size;
 pub trait UIComponent {
     fn set_needs_redraw(&mut self, value: bool);

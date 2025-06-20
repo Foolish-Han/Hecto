@@ -10,12 +10,13 @@ mod fileinfo;
 mod location;
 mod searchdirection;
 mod searchinfo;
+use std::{cmp::min, io::Error, usize};
+
 use buffer::Buffer;
 use fileinfo::FileInfo;
 use location::Location;
 use searchdirection::SearchDirection;
 use searchinfo::SearchInfo;
-use std::{cmp::min, io::Error, usize};
 #[derive(Default)]
 pub struct View {
     buffer: Buffer,

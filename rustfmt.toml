@@ -1,0 +1,70 @@
+# Rust 代码格式化配置 (Nightly)
+edition = "2021"
+
+# 启用不稳定特性
+unstable_features = true
+
+# 基本格式设置
+max_width = 100
+hard_tabs = false
+tab_spaces = 4
+newline_style = "Unix"
+
+# 导入语句格式化
+reorder_imports = true
+group_imports = "StdExternalCrate"
+imports_granularity = "Crate"
+
+# 注释格式化
+wrap_comments = true
+comment_width = 80
+normalize_comments = true
+normalize_doc_attributes = true
+format_code_in_doc_comments = true
+
+# 字符串和宏格式化
+format_strings = false
+format_macro_matchers = true
+format_macro_bodies = true
+
+# 函数和控制流格式化
+fn_params_layout = "Tall"
+brace_style = "SameLineWhere"
+control_brace_style = "AlwaysSameLine"
+indent_style = "Block"
+
+# 空格和标点
+spaces_around_ranges = false
+type_punctuation_density = "Compressed"
+space_before_colon = false
+space_after_colon = true
+
+# 其他格式化选项
+remove_nested_parens = true
+use_field_init_shorthand = true
+force_explicit_abi = false
+empty_item_single_line = true
+struct_lit_single_line = true
+fn_single_line = false
+where_single_line = false
+
+# 换行相关
+use_small_heuristics = "Default"
+binop_separator = "Front"
+combine_control_expr = true
+struct_field_align_threshold = 0
+enum_discrim_align_threshold = 0
+
+# Nightly 特有功能
+trailing_comma = "Vertical"
+trailing_semicolon = true
+match_block_trailing_comma = true
+hex_literal_case = "Preserve"
+condense_wildcard_suffixes = false
+overflow_delimited_expr = false
+merge_derives = true
+skip_children = false
+inline_attribute_width = 0
+
+# 其他
+color = "Auto"

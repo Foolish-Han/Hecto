@@ -1,8 +1,9 @@
-use super::{FileInfo, Line, Location};
 use std::{
     fs::{File, read_to_string},
     io::{Error, Write},
 };
+
+use super::{FileInfo, Line, Location};
 #[derive(Default)]
 pub struct Buffer {
     pub lines: Vec<Line>,

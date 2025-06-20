@@ -1,7 +1,7 @@
 mod attribute;
-use super::{AnnotatedString, Position, Size};
-use attribute::Attribute;
 use std::io::{Error, Write, stdout};
+
+use attribute::Attribute;
 use crossterm::{
     Command,
     cursor::{Hide, MoveTo, Show},
@@ -15,6 +15,8 @@ use crossterm::{
         LeaveAlternateScreen, SetTitle, disable_raw_mode, enable_raw_mode, size,
     },
 };
+
+use super::{AnnotatedString, Position, Size};
 pub struct Terminal;
 impl Terminal {
     pub fn initialize() -> Result<(), Error> {

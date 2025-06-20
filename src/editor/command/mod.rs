@@ -1,5 +1,7 @@
-use crossterm::event::Event;
 use std::{convert::TryFrom, usize};
+
+use crossterm::event::Event;
+
 use super::Size;
 mod edit;
 mod movecommand;

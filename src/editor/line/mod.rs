@@ -4,10 +4,12 @@ use std::{
     fmt::{self, Display},
     ops::{Deref, Range},
 };
+
 use graphemewidth::GraphemeWidth;
 use textfragment::TextFragment;
 use unicode_segmentation::UnicodeSegmentation;
 use unicode_width::UnicodeWidthStr;
+
 use super::{AnnotatedString, AnnotationType, Col};
 type GraphemeIdx = usize;
 type ByteIdx = usize;
@@ -68,7 +70,7 @@ impl Line {
                     }
                 }
                 Some('·')
-            }
+            },
             _ => None,
         }
     }

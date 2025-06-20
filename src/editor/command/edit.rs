@@ -15,7 +15,7 @@ impl TryFrom<KeyEvent> for Edit {
         match (value.code, value.modifiers) {
             (Char(character), KeyModifiers::NONE | KeyModifiers::SHIFT) => {
                 Ok(Self::Insert(character))
-            }
+            },
             (Tab, KeyModifiers::NONE) => Ok(Self::Insert('\t')),
             (Enter, KeyModifiers::NONE) => Ok(Self::InsertNewline),
             (Delete, KeyModifiers::NONE) => Ok(Self::Delete),

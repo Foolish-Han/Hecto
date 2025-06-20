@@ -1,5 +1,9 @@
 use std::{cmp::min, io::Error};
-use super::{super::{command::Edit, Line, Size, Terminal}, UIComponent};
+
+use super::{
+    super::{Line, Size, Terminal, command::Edit},
+    UIComponent,
+};
 #[derive(Default)]
 pub struct CommandBar {
     prompt: String,
@@ -12,7 +16,7 @@ impl CommandBar {
         match command {
             Edit::Insert(character) => self.value.append_char(character),
             Edit::DeleteBackward => self.value.delete_last(),
-            _ => {}
+            _ => {},
         }
         self.set_needs_redraw(true);
     }
