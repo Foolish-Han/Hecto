@@ -1,72 +1,185 @@
-# Hecto Editor 🎉
+# Hecto Editor 🦀✨
 
-Welcome to Hecto, a playful and powerful text editor written in Rust! This README will guide you through the project's architecture, its purpose, and how to get started with building, running, and contributing to Hecto. 😊
+A modern, terminal-based text editor written in Rust, designed to be simple, efficient, and powerful. Hecto combines the safety and performance of Rust with an intuitive editing experience and comprehensive Unicode support.
 
-## Overview
+## 🌟 Features
 
-Hecto is a terminal-based text editor designed to be simple, efficient, and fun to use. It provides essential features for text editing, such as opening, editing, and saving files, as well as searching within the text. Hecto is built with Rust, leveraging its safety and performance features to create a reliable and fast editor. 🚀
+### Core Editing
+- **Unicode-Aware Text Editing**: Proper handling of Unicode grapheme clusters, multi-byte characters, and combining characters
+- **Efficient File Operations**: Fast loading and saving of text files with proper encoding support  
+- **Smart Cursor Movement**: Precise cursor positioning with support for complex Unicode text
+- **Line-Based Operations**: Newline insertion, line splitting, and merging
 
-## Project Architecture
+### Search & Navigation
+- **Interactive Search**: Forward and backward text search with real-time highlighting
+- **Search Navigation**: Jump between search results with arrow keys
+- **Match Highlighting**: Visual highlighting of search matches and current selection
+- **Search State Management**: Return to original position when canceling search
 
-Hecto's architecture is modular, with each module responsible for a specific aspect of the editor's functionality. Here's a high-level overview of the main modules and their responsibilities:
+### User Interface
+- **Status Bar**: Real-time display of document information, cursor position, and file status
+- **Message Bar**: Contextual messages and notifications with automatic expiration
+- **Command Bar**: Interactive prompts for save operations and search queries
+- **Welcome Screen**: Friendly welcome message for new sessions
 
-- `src/editor.rs`: The main editor application, handling the overall functionality and event loop.
-- `src/editor/command.rs`: Defines the various commands (move, edit, system) that the editor can execute.
-- `src/editor/commandbar.rs`: Manages the command bar, where users can input commands.
-- `src/editor/documentstatus.rs`: Represents the status of a document, including line count and modification status.
-- `src/editor/line.rs`: Handles the representation and manipulation of individual lines of text.
-- `src/editor/messagebar.rs`: Manages the message bar, displaying messages to the user.
-- `src/editor/position.rs`: Defines the position type used to represent cursor positions.
-- `src/editor/size.rs`: Represents the size of the terminal.
-- `src/editor/statusbar.rs`: Manages the status bar, displaying information about the current document.
-- `src/editor/terminal.rs`: Handles terminal input/output operations.
-- `src/editor/uicomponent.rs`: Defines a trait for UI components, providing methods for rendering and resizing.
-- `src/editor/view.rs`: Manages the view of the text buffer, including rendering and scrolling.
+### Terminal Integration
+- **Full Terminal Control**: Alternate screen mode with proper terminal restoration
+- **Responsive Layout**: Automatic adaptation to terminal resizing
+- **Smooth Scrolling**: Efficient viewport management with horizontal and vertical scrolling
+- **Cross-Platform**: Works on Linux, macOS, and Windows terminals
 
-## Building and Running
+## 🏗️ Architecture
 
-To build and run Hecto, follow these steps:
+Hecto follows a modular, component-based architecture with clear separation of concerns:
 
-1. Ensure you have Rust installed. If not, you can install it from [rust-lang.org](https://www.rust-lang.org/).
-2. Clone the repository:
-   ```sh
+### Core Components
+- **`src/main.rs`**: Application entry point and initialization
+- **`src/editor.rs`**: Main editor controller and event loop management
+- **`src/editor/terminal/`**: Low-level terminal operations and attribute management
+- **`src/editor/command/`**: Command system for processing user input
+  - `edit.rs`: Text editing commands (insert, delete, newline)
+  - `movecommand.rs`: Cursor movement commands
+  - `system.rs`: System operations (save, quit, search, resize)
+
+### Text Processing
+- **`src/editor/line/`**: Unicode-aware line representation and manipulation
+  - `textfragment.rs`: Text fragment processing with styling
+  - `graphemewidth.rs`: Unicode grapheme cluster width calculations
+- **`src/editor/annotatedstring/`**: Text annotation system for syntax highlighting
+  - `annotation.rs`: Text annotation definitions
+  - `annotationtype.rs`: Types of annotations (highlight, selection, etc.)
+  - `annotationstringiterator.rs`: Efficient iteration over annotated text
+
+### UI Components
+- **`src/editor/uicomponents/view/`**: Main text editing view
+  - `buffer.rs`: Text buffer management with file I/O
+  - `location.rs`: Cursor position tracking
+  - `searchinfo.rs`: Search state management
+  - `fileinfo.rs`: File metadata handling
+- **`src/editor/uicomponents/statusbar.rs`**: Document status display
+- **`src/editor/uicomponents/messagebar.rs`**: Temporary message display
+- **`src/editor/uicomponents/commandbar.rs`**: Interactive user input
+
+### Supporting Types
+- **`src/editor/position.rs`**: 2D coordinate system (row/column)
+- **`src/editor/size.rs`**: Viewport dimensions
+- **`src/editor/documentstatus.rs`**: Document metadata structure
+
+## 🚀 Getting Started
+
+### Prerequisites
+- **Rust**: Install from [rust-lang.org](https://www.rust-lang.org/) (2024 edition)
+- **Terminal**: Any modern terminal emulator with Unicode support
+
+### Building and Running
+
+1. **Clone the repository**:
+   ```bash
    git clone https://github.com/Foolish-Han/Hecto.git
    cd Hecto
    ```
-3. Build the project:
-   ```sh
+
+2. **Build the project**:
+   ```bash
    cargo build --release
    ```
-4. Run the editor:
-   ```sh
+
+3. **Run the editor**:
+   ```bash
+   # Start with a new file
    cargo run --release
+
+   # Open an existing file
+   cargo run --release filename.txt
    ```
 
-## Usage
+### Development
+```bash
+# Run in development mode
+cargo run [filename]
 
-Once you have Hecto running, you can use the following keybindings to interact with the editor:
+# Run tests
+cargo test
 
-- `Ctrl-F`: Find text within the document.
-- `Ctrl-S`: Save the current document.
-- `Ctrl-Q`: Quit the editor.
-- Arrow keys: Move the cursor.
-- `Enter`: Insert a newline.
-- `Backspace`: Delete the character before the cursor.
-- `Delete`: Delete the character under the cursor.
+# Check code formatting
+cargo fmt
 
-## Contributing
+# Run linter
+cargo clippy
+```
 
-We welcome contributions to Hecto! If you'd like to contribute, please follow these guidelines:
+## ⌨️ Key Bindings
 
-1. Fork the repository and create a new branch for your feature or bugfix.
-2. Write clear, concise, and professional comments in your code.
-3. Ensure your code follows Rust's best practices and passes all tests.
-4. Submit a pull request with a detailed description of your changes.
+### File Operations
+- **`Ctrl+S`**: Save current file (prompts for filename if new)
+- **`Ctrl+Q`**: Quit editor (requires 3 consecutive presses if unsaved changes)
 
-If you encounter any issues or have suggestions for improvements, please open an issue on GitHub. We appreciate your feedback and contributions!
+### Navigation
+- **Arrow Keys**: Move cursor in all directions
+- **`Page Up/Down`**: Navigate by viewport height
+- **`Home`**: Move to beginning of line
+- **`End`**: Move to end of line
 
-## Learning Purpose
+### Editing
+- **`Enter`**: Insert newline and move to next line
+- **`Backspace`**: Delete character before cursor
+- **`Delete`**: Delete character at cursor
+- **Regular characters**: Insert at cursor position
 
-This project is for learning purposes and is based on the tutorial by Philipp Flenker. You can find the original tutorial at [https://philippflenker.com/](https://philippflenker.com/). 📚
+### Search
+- **`Ctrl+F`**: Enter search mode
+- **`Escape`**: Cancel search and return to original position
+- **`Enter`** (in search): Keep current position and exit search
+- **`→/↓`** (in search): Find next match
+- **`←/↑`** (in search): Find previous match
 
-Happy coding with Hecto! 🎉✨
+## 🛠️ Dependencies
+
+```toml
+[dependencies]
+crossterm = "0.29.0"        # Cross-platform terminal manipulation
+unicode-segmentation = "1.11.0"  # Unicode grapheme cluster support
+unicode-width = "0.1.12"    # Unicode character width calculations
+```
+
+## 🎯 Project Goals
+
+This project serves multiple purposes:
+
+1. **Learning Rust**: Demonstrates advanced Rust concepts including error handling, lifetimes, and zero-cost abstractions
+2. **Terminal Programming**: Shows modern terminal application development with proper Unicode support
+3. **Software Architecture**: Illustrates clean, modular design with separation of concerns
+4. **Text Processing**: Implements sophisticated Unicode-aware text handling
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these guidelines:
+
+1. **Fork the repository** and create a feature branch
+2. **Write clear, documented code** following Rust best practices
+3. **Add tests** for new functionality
+4. **Update documentation** as needed
+5. **Submit a pull request** with a detailed description
+
+### Code Standards
+- Follow `rustfmt` formatting
+- Pass all `clippy` lints
+- Include comprehensive documentation
+- Write meaningful commit messages
+
+## 📚 Learning Resources
+
+This project is inspired by and builds upon:
+- **Tutorial by Philipp Flenker**: [https://philippflenker.com/](https://philippflenker.com/)
+- **The Rust Programming Language**: [https://doc.rust-lang.org/book/](https://doc.rust-lang.org/book/)
+- **Unicode Standards**: Understanding proper text handling in modern applications
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+**Happy coding with Hecto!** 🦀✨
+
+*A text editor that grows with you, built with Rust's safety and performance in mind.*
