@@ -1,5 +1,7 @@
-use crossterm::event::{KeyCode::{
-    Down, End, Home, Left, PageDown, PageUp, Right, Up, }, KeyEvent, KeyModifiers};
+use crossterm::event::{
+    KeyCode::{Down, End, Home, Left, PageDown, PageUp, Right, Up},
+    KeyEvent, KeyModifiers,
+};
 
 /// Represents movement commands in the editor.
 #[derive(Clone, Copy)]
@@ -44,7 +46,7 @@ impl TryFrom<KeyEvent> for Move {
             }
         } else {
             Err(format!(
-                "Unsupported code: {code:?} or modifiers: {modifiers:?}"
+                "Unsupported key code {code:?} or modifier {modifiers:?}"
             ))
         }
     }

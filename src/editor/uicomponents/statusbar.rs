@@ -1,4 +1,7 @@
-use super::{super::{DocumentStatus, Size, Terminal}, UIComponent};
+use super::{
+    super::{DocumentStatus, Size, Terminal},
+    UIComponent,
+};
 use std::io::Error;
 
 /// Represents the status bar in the editor.
@@ -18,7 +21,7 @@ impl StatusBar {
     pub fn update_status(&mut self, new_status: DocumentStatus) {
         if self.current_status != new_status {
             self.current_status = new_status;
-            self.needs_redraw = true;
+            self.set_needs_redraw(true);
         }
     }
 }

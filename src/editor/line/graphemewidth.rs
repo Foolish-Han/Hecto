@@ -1,5 +1,5 @@
 /// Represents the width of a grapheme.
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub enum GraphemeWidth {
     /// Half-width grapheme.
     Half,

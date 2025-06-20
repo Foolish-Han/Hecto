@@ -188,7 +188,7 @@ impl View {
     /// * `command` - The edit command to handle.
     pub fn handle_edit_command(&mut self, command: Edit) {
         match command {
-            Edit::DeleteBackwards => self.delete_backward(),
+            Edit::DeleteBackward => self.delete_backward(),
             Edit::Delete => self.delete(),
             Edit::InsertNewline => self.insert_newline(),
             Edit::Insert(character) => self.insert_char(character),

@@ -96,6 +96,7 @@ impl Line {
     fn get_replacement_character(for_str: &str) -> Option<char> {
         let width = for_str.width();
         match for_str {
+            "" => None,
             "\t" => Some(' '),
             _ if width > 0 && for_str.trim().is_empty() => Some('␣'),
             _ if width == 0 => {
@@ -120,7 +121,7 @@ impl Line {
     /// # Returns
     ///
     /// A string containing the visible graphemes in the specified range.
-    pub fn get_visible_graphemes(&self, range: Range<GraphemeIdx>) -> String {
+    pub fn get_visible_graphemes(&self, range: Range<ColIdx>) -> String {
         self.get_annotated_visible_substr(range, None, None)
             .to_string()
     }
@@ -143,7 +144,7 @@ impl Line {
                     |(start_byte_idx, grapheme_idx)| {
                         if let Some(selected_match) = selected_match {
                             if *grapheme_idx == selected_match {
-                                result.add_annotations(
+                                result.add_annotation(
                                     AnnotationType::SelectedMatch,
                                     *start_byte_idx,
                                     start_byte_idx.saturating_add(query.len()),
@@ -151,7 +152,7 @@ impl Line {
                                 return;
                             }
                         }
-                        result.add_annotations(
+                        result.add_annotation(
                             AnnotationType::Match,
                             *start_byte_idx,
                             start_byte_idx.saturating_add(query.len()),
@@ -231,10 +232,7 @@ impl Line {
         self.fragments
             .iter()
             .take(grapheme_idx)
-            .map(|fragment| match fragment.rendered_width {
-                GraphemeWidth::Half => 1,
-                GraphemeWidth::Full => 2,
-            })
+            .map(|fragment| usize::from(fragment.rendered_width))
             .sum()
     }
 

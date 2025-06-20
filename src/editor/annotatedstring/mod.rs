@@ -27,7 +27,7 @@ impl AnnotatedString {
         }
     }
 
-    pub fn add_annotations(
+    pub fn add_annotation(
         &mut self,
         annotation_type: AnnotationType,
         start_byte_idx: usize,
@@ -93,7 +93,7 @@ impl AnnotatedString {
                 if shortened {
                     max(
                         start_byte_idx,
-                        annotation.end_byte_idx.saturating_add(len_difference),
+                        annotation.end_byte_idx.saturating_sub(len_difference),
                     )
                 } else {
                     min(
@@ -103,7 +103,7 @@ impl AnnotatedString {
                 }
             } else {
                 annotation.end_byte_idx
-            };
+            }
         });
 
         self.annotations.retain(|annotation| {

@@ -1,4 +1,7 @@
-use crossterm::event::{KeyCode::{Backspace, Char, Delete, Enter, Tab}, KeyEvent, KeyModifiers};
+use crossterm::event::{
+    KeyCode::{Backspace, Char, Delete, Enter, Tab},
+    KeyEvent, KeyModifiers,
+};
 
 /// Represents editing commands in the editor.
 #[derive(Clone, Copy)]
@@ -6,7 +9,7 @@ pub enum Edit {
     Insert(char),
     InsertNewline,
     Delete,
-    DeleteBackwards,
+    DeleteBackward,
 }
 
 impl TryFrom<KeyEvent> for Edit {
@@ -29,9 +32,9 @@ impl TryFrom<KeyEvent> for Edit {
             (Tab, KeyModifiers::NONE) => Ok(Self::Insert('\t')),
             (Enter, KeyModifiers::NONE) => Ok(Self::InsertNewline),
             (Delete, KeyModifiers::NONE) => Ok(Self::Delete),
-            (Backspace, KeyModifiers::NONE) => Ok(Self::DeleteBackwards),
+            (Backspace, KeyModifiers::NONE) => Ok(Self::DeleteBackward),
             _ => Err(format!(
-                "Unsupported code: {:?} with modifiers: {:?}",
+                "Unsupported key code {:?} with modifier {:?}",
                 value.code, value.modifiers
             )),
         }

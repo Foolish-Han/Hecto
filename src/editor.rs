@@ -87,7 +87,7 @@ impl Editor {
         if let Some(file_name) = args.get(1) {
             debug_assert!(!file_name.is_empty());
             if editor.view.load(file_name).is_err() {
-                editor.update_message(&format!("Could not open file: {file_name}"));
+                editor.update_message(&format!("ERR:Could not open file: {file_name}"));
             }
         }
 
