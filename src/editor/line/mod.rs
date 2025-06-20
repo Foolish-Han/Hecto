@@ -96,7 +96,7 @@ impl Line {
     fn get_replacement_character(for_str: &str) -> Option<char> {
         let width = for_str.width();
         match for_str {
-            "" => None,
+            " " => None,
             "\t" => Some(' '),
             _ if width > 0 && for_str.trim().is_empty() => Some('␣'),
             _ if width == 0 => {
