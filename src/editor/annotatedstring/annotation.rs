@@ -1,5 +1,4 @@
 use super::AnnotationType;
-
 #[derive(Clone, Copy, Debug)]
 #[allow(clippy::struct_field_names)]
 pub struct Annotation {
@@ -7,4 +6,3 @@ pub struct Annotation {
     pub start_byte_idx: usize,
     pub end_byte_idx: usize,
 }
-

@@ -2,8 +2,6 @@ use crossterm::event::{
     KeyCode::{Backspace, Char, Delete, Enter, Tab},
     KeyEvent, KeyModifiers,
 };
-
-/// Represents editing commands in the editor.
 #[derive(Clone, Copy)]
 pub enum Edit {
     Insert(char),
@@ -11,19 +9,8 @@ pub enum Edit {
     Delete,
     DeleteBackward,
 }
-
 impl TryFrom<KeyEvent> for Edit {
     type Error = String;
-
-    /// Converts a `KeyEvent` into an `Edit` command.
-    ///
-    /// # Arguments
-    ///
-    /// * `value` - The `KeyEvent` to convert.
-    ///
-    /// # Returns
-    ///
-    /// A `Result` containing the `Edit` command or an error message.
     fn try_from(value: KeyEvent) -> Result<Self, Self::Error> {
         match (value.code, value.modifiers) {
             (Char(character), KeyModifiers::NONE | KeyModifiers::SHIFT) => {

@@ -4,7 +4,6 @@ use std::{
     io::Error,
     panic::{set_hook, take_hook},
 };
-
 mod command;
 mod documentstatus;
 mod line;
@@ -12,9 +11,7 @@ mod position;
 mod size;
 mod terminal;
 mod uicomponents;
-
 mod annotatedstring;
-
 use self::{
     annotatedstring::{AnnotatedString, AnnotationType},
     command::{
@@ -30,15 +27,9 @@ use self::{
     terminal::Terminal,
     uicomponents::{CommandBar, MessageBar, StatusBar, UIComponent, View},
 };
-
-/// The name of the editor, retrieved from the environment.
 pub const NAME: &str = env!("CARGO_PKG_NAME");
-
-/// The version of the editor, retrieved from the environment.
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
-
 const QUIT_TIMES: u8 = 3;
-
 #[derive(Eq, PartialEq, Default)]
 enum PromptType {
     Search,
@@ -46,14 +37,11 @@ enum PromptType {
     #[default]
     None,
 }
-
 impl PromptType {
     fn is_none(&self) -> bool {
         *self == Self::None
     }
 }
-
-/// Represents the main editor application.
 #[derive(Default)]
 pub struct Editor {
     should_quit: bool,
@@ -66,10 +54,7 @@ pub struct Editor {
     title: String,
     quit_times: u8,
 }
-
 impl Editor {
-    // region: struct lifecycle
-    /// Creates a new instance of the editor.
     pub fn new() -> Result<Self, Error> {
         let current_hook = take_hook();
         set_hook(Box::new(move |panic_info| {
@@ -77,12 +62,10 @@ impl Editor {
             current_hook(panic_info);
         }));
         Terminal::initialize()?;
-
         let mut editor = Self::default();
         let size = Terminal::size().unwrap_or_default();
         editor.handle_resize_command(size);
         editor.update_message("HELP: Ctrl-F = find | Ctrl-S = save | Ctrl-Q = quit");
-
         let args: Vec<String> = env::args().collect();
         if let Some(file_name) = args.get(1) {
             debug_assert!(!file_name.is_empty());
@@ -90,14 +73,9 @@ impl Editor {
                 editor.update_message(&format!("ERR:Could not open file: {file_name}"));
             }
         }
-
         editor.refresh_status();
         Ok(editor)
     }
-    // endregion
-
-    // region: Event Loop
-    /// Runs the main loop of the editor.
     pub fn run(&mut self) {
         loop {
             self.refresh_screen();
@@ -120,8 +98,6 @@ impl Editor {
             self.refresh_status();
         }
     }
-
-    /// Refreshes the screen by rendering the view and status bar.
     fn refresh_screen(&mut self) {
         let Size { height, width } = self.terminal_size;
         if height == 0 || width == 0 {
@@ -148,47 +124,32 @@ impl Editor {
         } else {
             self.view.caret_position()
         };
-
         debug_assert!(new_caret_pos.col <= self.terminal_size.width);
         debug_assert!(new_caret_pos.row <= self.terminal_size.height);
-
         let _ = Terminal::move_caret_to(new_caret_pos);
         let _ = Terminal::show_caret();
         let _ = Terminal::execute();
     }
-
-    /// Refreshes the status of the editor.
     pub fn refresh_status(&mut self) {
         let status = self.view.get_status();
         let title = format!("{} - {NAME}", status.file_name);
         self.status_bar.update_status(status);
-
         if title != self.title && matches!(Terminal::set_title(&title), Ok(())) {
             self.title = title;
         }
     }
-
-    /// Evaluates an event and processes it.
-    ///
-    /// # Arguments
-    ///
-    /// * `event` - The event to evaluate.
     fn evaluate_event(&mut self, event: Event) {
         let should_process = match &event {
             Event::Key(KeyEvent { kind, .. }) => kind == &KeyEventKind::Press,
             Event::Resize(_, _) => true,
             _ => false,
         };
-
         if should_process {
             if let Ok(command) = Command::try_from(event) {
                 self.process_command(command);
             }
         }
     }
-    // endregion
-
-    // region: command handling
     fn process_command(&mut self, command: Command) {
         if let System(Resize(size)) = command {
             self.handle_resize_command(size);
@@ -200,16 +161,12 @@ impl Editor {
             PromptType::None => self.process_command_no_prompt(command),
         }
     }
-    // endregion
-
-    // no prompt handling
     fn process_command_no_prompt(&mut self, command: Command) {
         if matches!(command, System(Quit)) {
             self.handle_quit_command();
             return;
         }
         self.reset_quit_times();
-
         match command {
             System(Search) => self.set_prompt(PromptType::Search),
             System(Save) => self.handle_save_command(),
@@ -218,9 +175,6 @@ impl Editor {
             System(_) => {}
         }
     }
-    // endregion
-
-    // region resize command handling
     fn handle_resize_command(&mut self, size: Size) {
         self.terminal_size = size;
         self.view.resize(Size {
@@ -235,11 +189,6 @@ impl Editor {
         self.command_bar.resize(bar_size);
         self.status_bar.resize(bar_size);
     }
-
-    // endregion
-
-    // region quit command handling
-    // clippy::arithmetic_side_effects: quit_times is guaranteed to be between 0 and QUIT_TIMES
     #[allow(clippy::arithmetic_side_effects)]
     fn handle_quit_command(&mut self) {
         if !self.view.get_status().is_modified || self.quit_times + 1 == QUIT_TIMES {
@@ -252,16 +201,12 @@ impl Editor {
             ));
         }
     }
-
     fn reset_quit_times(&mut self) {
         if self.quit_times > 0 {
             self.quit_times = 0;
             self.update_message("");
         }
     }
-    // endregion
-
-    // region save command & prompt handling
     fn handle_save_command(&mut self) {
         if self.view.is_file_loaded() {
             self.save(None);
@@ -269,7 +214,6 @@ impl Editor {
             self.set_prompt(PromptType::Save);
         }
     }
-
     fn process_command_during_save(&mut self, command: Command) {
         match command {
             System(Dismiss) => {
@@ -285,7 +229,6 @@ impl Editor {
             _ => {}
         }
     }
-
     fn save(&mut self, file_name: Option<&str>) {
         let result = if let Some(name) = file_name {
             self.view.save_as(name)
@@ -298,9 +241,6 @@ impl Editor {
             self.update_message("Error writing file!");
         }
     }
-    // endregion
-
-    // region search command & prompt handling
     fn process_command_during_search(&mut self, command: Command) {
         match command {
             System(Dismiss) => {
@@ -325,19 +265,12 @@ impl Editor {
             _ => {}
         }
     }
-    // endregion
-
-    // region message & command bar
     fn update_message(&mut self, new_message: &str) {
         self.message_bar.update_message(new_message);
     }
-    // endregion
-
-    // region prompt handling
     fn in_prompt(&self) -> bool {
         !self.prompt_type.is_none()
     }
-
     fn set_prompt(&mut self, prompt_type: PromptType) {
         match prompt_type {
             PromptType::Save => self.command_bar.set_prompt("Save as: "),
@@ -351,9 +284,7 @@ impl Editor {
         self.command_bar.clear_value();
         self.prompt_type = prompt_type;
     }
-    // endregion
 }
-
 impl Drop for Editor {
     fn drop(&mut self) {
         let _ = Terminal::terminate();

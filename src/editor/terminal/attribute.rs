@@ -1,12 +1,9 @@
 use crossterm::style::Color;
-
 use crate::editor::annotatedstring::AnnotationType;
-
 pub struct Attribute {
     pub foreground: Option<Color>,
     pub background: Option<Color>,
 }
-
 impl From<AnnotationType> for Attribute {
     fn from(value: AnnotationType) -> Self {
         match value {

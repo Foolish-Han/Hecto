@@ -2,8 +2,6 @@ use crossterm::event::{
     KeyCode::{Down, End, Home, Left, PageDown, PageUp, Right, Up},
     KeyEvent, KeyModifiers,
 };
-
-/// Represents movement commands in the editor.
 #[derive(Clone, Copy)]
 pub enum Move {
     PageUp,
@@ -15,19 +13,8 @@ pub enum Move {
     Up,
     Down,
 }
-
 impl TryFrom<KeyEvent> for Move {
     type Error = String;
-
-    /// Converts a `KeyEvent` into a `Move` command.
-    ///
-    /// # Arguments
-    ///
-    /// * `value` - The `KeyEvent` to convert.
-    ///
-    /// # Returns
-    ///
-    /// A `Result` containing the `Move` command or an error message.
     fn try_from(value: KeyEvent) -> Result<Self, Self::Error> {
         let KeyEvent {
             code, modifiers, ..
