@@ -28,12 +28,14 @@
 //! buffer.save().expect("Failed to save file");
 //! ```
 
+use crate::prelude::*;
+
 use std::{
     fs::{File, read_to_string},
     io::{Error, Write},
 };
 
-use super::{FileInfo, Line, Location};
+use super::{FileInfo, Line};
 /// A text buffer that manages document content and file operations.
 ///
 /// The `Buffer` struct represents the core text storage for a document, providing

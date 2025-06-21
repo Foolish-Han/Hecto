@@ -4,6 +4,8 @@
 //! Unicode grapheme within a line of text along with its display properties
 //! and metadata.
 
+use crate::prelude::*;
+
 use super::GraphemeWidth;
 
 /// Represents a single grapheme cluster within a line of text
@@ -26,5 +28,5 @@ pub struct TextFragment {
     /// Optional replacement character for display (e.g., for control characters)
     pub replacement: Option<char>,
     /// Byte index where this grapheme starts in the original string
-    pub start_byte_idx: usize,
+    pub start: ByteIdx,
 }

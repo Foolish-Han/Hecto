@@ -40,23 +40,23 @@
 //! view.insert_char('i');
 //! ```
 
+use crate::prelude::*;
+
 use super::{
     super::{
-        Col, DocumentStatus, Line, NAME, Position, Row, Size, Terminal, VERSION,
+        DocumentStatus, Line, Terminal,
         command::{Edit, Move},
     },
     uicomponent::UIComponent,
 };
 mod buffer;
 mod fileinfo;
-mod location;
 mod searchdirection;
 mod searchinfo;
 use std::{cmp::min, io::Error, usize};
 
 use buffer::Buffer;
 use fileinfo::FileInfo;
-use location::Location;
 use searchdirection::SearchDirection;
 use searchinfo::SearchInfo;
 /// The main text editing view component.
@@ -192,8 +192,7 @@ impl View {
             self.scroll_offset = search_info.prev_scroll_offset;
             self.scroll_text_location_into_view();
         }
-        self.search_info = None;
-        self.set_needs_redraw(true);
+        self.exit_search();
     }
 
     /// Performs a search for the given query string.
@@ -215,9 +214,6 @@ impl View {
     /// // Cursor moves to the first occurrence of "hello"
     /// ```
     pub fn search(&mut self, query: &str) {
-        if query.is_empty() {
-            return;
-        }
         if let Some(search_info) = &mut self.search_info {
             search_info.query = Some(Line::from(query));
         }
@@ -566,7 +562,7 @@ impl View {
     /// # Errors
     ///
     /// Returns an error if terminal output operations fail
-    fn render_line(at: usize, line_text: &str) -> Result<(), Error> {
+    fn render_line(at: RowIdx, line_text: &str) -> Result<(), Error> {
         Terminal::print_row(at, line_text)
     }
 
@@ -617,7 +613,7 @@ impl View {
     /// - If `to` is above the viewport, scrolls up to show it at the top
     /// - If `to` is below the viewport, scrolls down to show it at the bottom
     /// - If `to` is already visible, no action is taken
-    fn scroll_vertically(&mut self, to: Row) {
+    fn scroll_vertically(&mut self, to: RowIdx) {
         let Size { height, .. } = self.size;
         let offset_changed = if to < self.scroll_offset.row {
             self.scroll_offset.row = to;
@@ -648,7 +644,7 @@ impl View {
     /// - If `to` is left of the viewport, scrolls left to show it at the left edge
     /// - If `to` is right of the viewport, scrolls right to show it at the right edge
     /// - If `to` is already visible, no action is taken
-    fn scroll_horizontally(&mut self, to: Col) {
+    fn scroll_horizontally(&mut self, to: ColIdx) {
         let Size { width, .. } = self.size;
         let offset_changed = if to < self.scroll_offset.col {
             self.scroll_offset.col = to;
@@ -906,7 +902,7 @@ impl UIComponent for View {
     /// - Search matches are highlighted when search is active
     /// - The welcome message is shown in the top third of empty documents
     /// - Empty lines are filled with tilde characters (similar to Vi/Vim)
-    fn draw(&mut self, origin_row: usize) -> Result<(), Error> {
+    fn draw(&mut self, origin_row: RowIdx) -> Result<(), Error> {
         let Size { height, width } = self.size;
         let end_y = origin_row.saturating_add(height);
         let top_third = height.div_ceil(3);

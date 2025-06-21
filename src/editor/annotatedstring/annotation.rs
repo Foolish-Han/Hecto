@@ -3,6 +3,8 @@
 //! This module defines the Annotation structure which represents a single
 //! text annotation with its type and byte range within a string.
 
+use crate::prelude::*;
+
 use super::AnnotationType;
 
 /// Represents a single annotation applied to a range of text
@@ -27,7 +29,7 @@ pub struct Annotation {
     /// The type of annotation, determining visual appearance
     pub annotation_type: AnnotationType,
     /// Starting byte index (inclusive) of the annotation
-    pub start_byte_idx: usize,
+    pub start: ByteIdx,
     /// Ending byte index (exclusive) of the annotation
-    pub end_byte_idx: usize,
+    pub end: ByteIdx,
 }

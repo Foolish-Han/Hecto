@@ -49,10 +49,14 @@
 /// let position = Location { line_idx: 2, grapheme_idx: 15 };
 /// println!("Line {}, Column {}", position.line_idx + 1, position.grapheme_idx + 1);
 /// ```
+///
+///
+use super::{GraphemeIdx, LineIdx};
+
 #[derive(Copy, Clone, Default)]
 pub struct Location {
     /// Zero-based index of the grapheme cluster within the line
-    pub grapheme_idx: usize,
+    pub grapheme_idx: GraphemeIdx,
     /// Zero-based index of the line within the document
-    pub line_idx: usize,
+    pub line_idx: LineIdx,
 }

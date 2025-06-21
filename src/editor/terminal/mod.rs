@@ -21,6 +21,8 @@
 
 mod attribute;
 
+use crate::prelude::*;
+
 use std::io::{Error, Write, stdout};
 
 use attribute::Attribute;
@@ -250,7 +252,7 @@ impl Terminal {
     /// # Returns
     ///
     /// Returns `Ok(())` on success, or an `Error` if any operation fails.
-    pub fn print_row(row: usize, line_text: &str) -> Result<(), Error> {
+    pub fn print_row(row: RowIdx, line_text: &str) -> Result<(), Error> {
         Self::move_caret_to(Position { col: 0, row })?;
         Self::clear_line()?;
         Self::print(line_text)?;
@@ -339,7 +341,7 @@ impl Terminal {
     /// # Returns
     ///
     /// Returns `Ok(())` on success, or an `Error` if any operation fails.
-    pub fn print_inverted_row(row: usize, line_text: &str) -> Result<(), Error> {
+    pub fn print_inverted_row(row: RowIdx, line_text: &str) -> Result<(), Error> {
         let width = Self::size()?.width;
         Self::print_row(
             row,

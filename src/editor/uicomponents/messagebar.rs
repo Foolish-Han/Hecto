@@ -4,15 +4,14 @@
 //! informational messages to the user. Messages automatically expire after
 //! a configured duration and are cleared from the display.
 
+use crate::prelude::*;
+
 use std::{
     io::Error,
     time::{Duration, Instant},
 };
 
-use super::{
-    super::{Size, Terminal},
-    UIComponent,
-};
+use super::{super::Terminal, UIComponent};
 
 /// Default duration for message display before automatic expiration
 const DEFAULT_DURATION: Duration = Duration::new(5, 0);
@@ -128,7 +127,7 @@ impl UIComponent for MessageBar {
     /// # Returns
     ///
     /// `Ok(())` on successful rendering, or an `Error` if terminal operations fail
-    fn draw(&mut self, origin_y: usize) -> Result<(), Error> {
+    fn draw(&mut self, origin_y: RowIdx) -> Result<(), Error> {
         // Check if the message has expired and mark it as cleared
         if self.current_message.is_expired() {
             self.cleared_after_expiry = true;

@@ -19,6 +19,7 @@
 //! high-level commands and dispatching them to appropriate handlers based on
 //! the current application state (normal editing, search mode, save prompt).
 
+use crate::prelude::*;
 use std::{
     env,
     io::Error,
@@ -32,8 +33,6 @@ mod annotatedstring;
 mod command;
 mod documentstatus;
 mod line;
-mod position;
-mod size;
 mod terminal;
 mod uicomponents;
 
@@ -47,17 +46,9 @@ use self::{
     },
     documentstatus::DocumentStatus,
     line::Line,
-    position::{Col, Position, Row},
-    size::Size,
     terminal::Terminal,
     uicomponents::{CommandBar, MessageBar, StatusBar, UIComponent, View},
 };
-
-/// The application name, derived from Cargo.toml
-pub const NAME: &str = env!("CARGO_PKG_NAME");
-
-/// The application version, derived from Cargo.toml
-pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// Number of consecutive Ctrl+Q presses required to quit with unsaved changes
 const QUIT_TIMES: u8 = 3;

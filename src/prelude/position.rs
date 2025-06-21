@@ -3,17 +3,7 @@
 //! This module defines types and utilities for representing positions within the text editor.
 //! It provides a simple coordinate system using row and column indices.
 
-/// Type alias for row coordinates
-///
-/// Represents a row index (line number) in the text buffer, using 0-based indexing.
-pub type Row = usize;
-
-/// Type alias for column coordinates
-///
-/// Represents a column index (character position within a line) in the text buffer,
-/// using 0-based indexing. This represents grapheme positions, not byte positions.
-pub type Col = usize;
-
+use super::{ColIdx, RowIdx};
 /// Represents a 2D position in the text editor
 ///
 /// A Position consists of a column and row coordinate, both using 0-based indexing.
@@ -29,9 +19,9 @@ pub type Col = usize;
 #[derive(Clone, Copy, Default)]
 pub struct Position {
     /// Column coordinate (horizontal position)
-    pub col: Col,
+    pub col: ColIdx,
     /// Row coordinate (vertical position)  
-    pub row: Row,
+    pub row: RowIdx,
 }
 
 impl Position {

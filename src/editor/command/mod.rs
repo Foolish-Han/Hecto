@@ -16,11 +16,11 @@
 //! Terminal events are converted to commands through the `TryFrom<Event>` implementation,
 //! which attempts to parse keyboard events and resize events into appropriate command types.
 
+use crate::prelude::*;
+
 use std::{convert::TryFrom, usize};
 
 use crossterm::event::Event;
-
-use super::Size;
 
 mod edit;
 mod movecommand;

@@ -4,9 +4,9 @@
 //! for all UI components in the Hecto editor. It establishes a consistent
 //! pattern for rendering, resizing, and managing the redraw state of UI elements.
 
-use std::io::Error;
+use crate::prelude::*;
 
-use super::super::Size;
+use std::io::Error;
 
 /// Common interface for all UI components in the editor
 ///
@@ -80,7 +80,7 @@ pub trait UIComponent {
     /// # Arguments
     ///
     /// * `origin_row` - The row where the component should start rendering
-    fn render(&mut self, origin_row: usize) {
+    fn render(&mut self, origin_row: RowIdx) {
         if self.needs_redraw() {
             if let Err(err) = self.draw(origin_row) {
                 #[cfg(debug_assertions)]
@@ -115,5 +115,5 @@ pub trait UIComponent {
     ///
     /// This method should return an error if any terminal operations fail
     /// during the rendering process.
-    fn draw(&mut self, origin_row: usize) -> Result<(), Error>;
+    fn draw(&mut self, origin_row: RowIdx) -> Result<(), Error>;
 }

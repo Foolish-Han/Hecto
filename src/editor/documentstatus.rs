@@ -4,6 +4,8 @@
 //! state of a document being edited, including metadata such as line count,
 //! current position, modification status, and filename.
 
+use crate::prelude::*;
+
 /// Represents the current status and metadata of a document
 ///
 /// DocumentStatus contains all the information needed to display document
@@ -14,7 +16,7 @@ pub struct DocumentStatus {
     /// Total number of lines in the document
     pub total_lines: usize,
     /// Current line index (0-based) where the cursor is positioned
-    pub current_line_idx: usize,
+    pub current_line_idx: LineIdx,
     /// Whether the document has unsaved modifications
     pub is_modified: bool,
     /// Name of the file, or a placeholder for new documents

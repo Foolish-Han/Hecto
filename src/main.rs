@@ -40,6 +40,7 @@
 
 mod editor;
 use editor::Editor;
+mod prelude;
 
 /// Entry point for the Hecto text editor application.
 ///

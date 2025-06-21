@@ -17,8 +17,7 @@
 //! };
 //! ```
 
-use super::Location;
-use crate::editor::{Line, Position};
+use crate::{editor::Line, prelude::*};
 
 /// Maintains state information for active search operations.
 ///

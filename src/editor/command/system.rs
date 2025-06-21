@@ -4,12 +4,12 @@
 //! behavior and state. System commands handle operations like saving, quitting,
 //! searching, and responding to terminal events.
 
+use crate::prelude::*;
+
 use crossterm::event::{
     KeyCode::{self, Char},
     KeyEvent, KeyModifiers,
 };
-
-use super::super::Size;
 
 /// Represents system-level editor operations
 ///

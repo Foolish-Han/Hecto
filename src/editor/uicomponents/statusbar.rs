@@ -5,6 +5,8 @@
 //! current cursor position. The status bar appears as an inverted row
 //! near the bottom of the editor interface.
 
+use crate::prelude::*;
+
 use std::io::Error;
 
 use super::{
@@ -81,7 +83,7 @@ impl UIComponent for StatusBar {
     /// # Returns
     ///
     /// `Ok(())` on successful rendering, or an `Error` if terminal operations fail
-    fn draw(&mut self, origin_row: usize) -> Result<(), Error> {
+    fn draw(&mut self, origin_row: RowIdx) -> Result<(), Error> {
         // Construct the left side of the status bar
         let line_count = self.current_status.line_count_to_string();
         let modified_indicator = self.current_status.modified_indicator_to_string();
