@@ -28,14 +28,15 @@
 //! buffer.save().expect("Failed to save file");
 //! ```
 
-use crate::prelude::*;
+use crate::{editor::annotatedstring::AnnotatedString, prelude::*};
 
 use std::{
     fs::{File, read_to_string},
     io::{Error, Write},
+    ops::Range,
 };
 
-use super::{FileInfo, Line};
+use super::{FileInfo, Highlighter, Line};
 /// A text buffer that manages document content and file operations.
 ///
 /// The `Buffer` struct represents the core text storage for a document, providing
@@ -67,13 +68,45 @@ use super::{FileInfo, Line};
 #[derive(Default)]
 pub struct Buffer {
     /// The lines of text that make up the document
-    pub lines: Vec<Line>,
+    lines: Vec<Line>,
     /// Information about the file associated with this buffer
-    pub file_info: FileInfo,
+    file_info: FileInfo,
     /// Whether the buffer has been modified since the last save
-    pub dirty: bool,
+    dirty: bool,
 }
 impl Buffer {
+    pub const fn is_dirty(&self) -> bool {
+        self.dirty
+    }
+
+    pub const fn get_file_info(&self) -> &FileInfo {
+        &self.file_info
+    }
+
+    pub fn grapheme_count(&self, idx: LineIdx) -> GraphemeIdx {
+        self.lines.get(idx).map_or(0, |line| line.grapheme_count())
+    }
+
+    pub fn width_until(&self, idx: LineIdx, until: GraphemeIdx) -> GraphemeIdx {
+        self.lines
+            .get(idx)
+            .map_or(0, |line| line.width_until(until))
+    }
+    pub fn get_highlighted_substring(
+        &self,
+        line_idx: LineIdx,
+        range: Range<GraphemeIdx>,
+        highlighter: &Highlighter,
+    ) -> Option<AnnotatedString> {
+        self.lines.get(line_idx).map(|line| {
+            line.get_annotated_visible_substr(range, highlighter.get_annotations(line_idx))
+        })
+    }
+    pub fn highlight(&self, idx: LineIdx, highlighter: &mut Highlighter) {
+        if let Some(line) = self.lines.get(idx) {
+            highlighter.highlight(idx, line);
+        }
+    }
     /// Loads a text file into a new buffer.
     ///
     /// Reads the specified file from disk and creates a new buffer containing
@@ -396,7 +429,7 @@ impl Buffer {
     /// let buffer = Buffer::load("example.txt").unwrap();
     /// println!("Buffer contains {} lines", buffer.height());
     /// ```
-    pub fn height(&self) -> usize {
+    pub fn height(&self) -> LineIdx {
         self.lines.len()
     }
     /// Inserts a character at the specified location.

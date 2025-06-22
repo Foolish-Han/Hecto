@@ -27,14 +27,11 @@ use std::{
 };
 
 mod annotatedstringpart;
-mod annotation;
 mod annotationstringiterator;
-mod annotationtype;
 
+use super::{Annotation, AnnotationType};
 use annotatedstringpart::AnnotatedStringPart;
-use annotation::Annotation;
 use annotationstringiterator::AnnotatedStringIterator;
-pub use annotationtype::AnnotationType;
 /// A string with associated visual annotations for styling and highlighting
 ///
 /// AnnotatedString combines text content with styling annotations that define
@@ -201,10 +198,7 @@ impl AnnotatedString {
                 if shortened {
                     max(start, annotation.start.saturating_sub(len_difference))
                 } else {
-                    min(
-                        end,
-                        annotation.start.saturating_add(len_difference),
-                    )
+                    min(end, annotation.start.saturating_add(len_difference))
                 }
             } else {
                 // Annotation starts before the replacement - no change needed

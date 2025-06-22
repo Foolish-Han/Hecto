@@ -6,7 +6,7 @@
 
 use crossterm::style::Color;
 
-use super::super::annotatedstring::AnnotationType;
+use super::super::AnnotationType;
 
 /// Represents terminal text display attributes
 ///

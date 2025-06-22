@@ -30,6 +30,8 @@ use crossterm::event::{Event, KeyEvent, KeyEventKind, read};
 
 // Module declarations
 mod annotatedstring;
+mod annotation;
+mod annotationtype;
 mod command;
 mod documentstatus;
 mod line;
@@ -37,7 +39,9 @@ mod terminal;
 mod uicomponents;
 
 use self::{
-    annotatedstring::{AnnotatedString, AnnotationType},
+    annotatedstring::AnnotatedString,
+    annotation::Annotation,
+    annotationtype::AnnotationType,
     command::{
         Command::{self, Edit, Move, System},
         Edit::InsertNewline,
