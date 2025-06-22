@@ -22,4 +22,5 @@ pub enum AnnotationType {
     /// highlighting (typically white text on yellow background) to distinguish
     /// it from other matches.
     SelectedMatch,
+    Digit,
 }
