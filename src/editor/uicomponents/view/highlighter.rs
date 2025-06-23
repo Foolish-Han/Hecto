@@ -1,7 +1,7 @@
-use std::{collections::HashMap, result};
+use std::collections::HashMap;
 
 use super::super::super::{Annotation, AnnotationType, Line};
-use crate::{editor::annotation, prelude::*};
+use crate::prelude::*;
 
 #[derive(Default)]
 pub struct Highlighter<'a> {

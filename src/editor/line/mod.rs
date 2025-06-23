@@ -27,10 +27,7 @@
 mod graphemewidth;
 mod textfragment;
 
-use crate::{
-    editor::annotation::{self, Annotation},
-    prelude::*,
-};
+use crate::{editor::annotation::Annotation, prelude::*};
 
 use std::{
     cmp::min,
@@ -43,7 +40,7 @@ use textfragment::TextFragment;
 use unicode_segmentation::UnicodeSegmentation;
 use unicode_width::UnicodeWidthStr;
 
-use super::{AnnotatedString, AnnotationType};
+use super::AnnotatedString;
 
 /// Represents a single line of text with Unicode support
 ///

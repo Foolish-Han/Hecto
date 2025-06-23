@@ -40,7 +40,7 @@
 //! view.insert_char('i');
 //! ```
 
-use crate::{editor::annotatedstring, prelude::*};
+use crate::prelude::*;
 
 use super::{
     super::{
@@ -907,7 +907,7 @@ impl UIComponent for View {
             let right = self.scroll_offset.col.saturating_add(width);
             if let Some(annotated_string) =
                 self.buffer
-                    .get_highlighted_substring(current_row, left..right, &highlighter)
+                    .get_highlighted_substring(line_idx, left..right, &highlighter)
             {
                 Terminal::print_annotated_row(current_row, &annotated_string)?;
             } else if current_row == top_third && self.buffer.is_empty() {
