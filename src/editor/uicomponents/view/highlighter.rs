@@ -48,7 +48,7 @@ impl<'a> Highlighter<'a> {
                 });
         }
     }
-    fn highlight_selected_words(&self, result: &mut Vec<Annotation>) {
+    fn highlight_selected_match(&self, result: &mut Vec<Annotation>) {
         if let Some(selected_match) = self.selected_match {
             if let Some(matched_word) = self.matched_word {
                 if matched_word.is_empty() {
@@ -69,7 +69,7 @@ impl<'a> Highlighter<'a> {
         self.highlight_matched_words(line, &mut result);
         if let Some(selected_match) = self.selected_match {
             if selected_match.line_idx == idx {
-                self.highlight_selected_words(&mut result);
+                self.highlight_selected_match(&mut result);
             }
         }
         self.highlights.insert(idx, result);
