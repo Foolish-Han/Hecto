@@ -22,15 +22,17 @@ impl<'a> Highlighter<'a> {
         self.highlights.get(&idx)
     }
     fn highlight_digits(line: &Line, result: &mut Vec<Annotation>) {
-        line.chars().enumerate().for_each(|(idx, ch)| {
-            if ch.is_ascii_digit() {
+        for fragment in &line.fragments {
+            if fragment.grapheme.len() == 1
+                && fragment.grapheme.chars().any(|ch| ch.is_ascii_digit())
+            {
                 result.push(Annotation {
                     annotation_type: AnnotationType::Digit,
-                    start: idx,
-                    end: idx.saturating_add(1),
+                    start: fragment.start,
+                    end: fragment.start.saturating_add(1),
                 });
             }
-        });
+        }
     }
     fn highlight_matched_words(&self, line: &Line, result: &mut Vec<Annotation>) {
         if let Some(matched_word) = self.matched_word {
@@ -48,18 +50,23 @@ impl<'a> Highlighter<'a> {
                 });
         }
     }
-    fn highlight_selected_match(&self, result: &mut Vec<Annotation>) {
+    fn highlight_selected_match(&self, line: &Line, result: &mut Vec<Annotation>) {
         if let Some(selected_match) = self.selected_match {
             if let Some(matched_word) = self.matched_word {
                 if matched_word.is_empty() {
                     return;
                 }
-                let start = selected_match.grapheme_idx;
-                result.push(Annotation {
+                let start = line.grapheme_idx_to_byte_idx(selected_match.grapheme_idx);
+                let annotation = Annotation {
                     annotation_type: AnnotationType::SelectedMatch,
                     start,
                     end: start.saturating_add(matched_word.len()),
-                });
+                };
+                info!(
+                    "add annotation {:?} from {:?} to {:?}",
+                    annotation.annotation_type, annotation.start, annotation.end
+                );
+                result.push(annotation);
             }
         }
     }
@@ -69,7 +76,7 @@ impl<'a> Highlighter<'a> {
         self.highlight_matched_words(line, &mut result);
         if let Some(selected_match) = self.selected_match {
             if selected_match.line_idx == idx {
-                self.highlight_selected_match(&mut result);
+                self.highlight_selected_match(line, &mut result);
             }
         }
         self.highlights.insert(idx, result);

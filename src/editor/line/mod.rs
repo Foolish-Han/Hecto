@@ -1,4 +1,3 @@
-
 mod graphemewidth;
 mod textfragment;
 
@@ -19,7 +18,7 @@ use super::AnnotatedString;
 
 #[derive(Default, Clone)]
 pub struct Line {
-    fragments: Vec<TextFragment>,
+    pub fragments: Vec<TextFragment>,
     string: String,
 }
 impl Line {
@@ -198,7 +197,7 @@ impl Line {
         }
     }
 
-    fn byte_idx_to_grapheme_idx(&self, byte_idx: ByteIdx) -> Option<GraphemeIdx> {
+    pub fn byte_idx_to_grapheme_idx(&self, byte_idx: ByteIdx) -> Option<GraphemeIdx> {
         if byte_idx > self.string.len() {
             return None;
         }
@@ -207,7 +206,7 @@ impl Line {
             .position(|fragment| fragment.start >= byte_idx)
     }
 
-    fn grapheme_idx_to_byte_idx(&self, grapheme_idx: GraphemeIdx) -> ByteIdx {
+    pub fn grapheme_idx_to_byte_idx(&self, grapheme_idx: GraphemeIdx) -> ByteIdx {
         debug_assert!(grapheme_idx <= self.grapheme_count());
         if grapheme_idx == 0 || self.grapheme_count() == 0 {
             return 0;

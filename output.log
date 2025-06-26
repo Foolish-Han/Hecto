@@ -1,0 +1,233 @@
+[2025-06-26 13:21:27 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 1
+[2025-06-26 13:21:28 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 1 to 2
+[2025-06-26 13:21:29 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 2 to 3
+[2025-06-26 13:21:29 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 4 to 5
+[2025-06-26 13:22:24 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 1
+[2025-06-26 13:22:28 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 1 to 2
+[2025-06-26 13:22:31 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 2 to 3
+[2025-06-26 13:22:36 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 4 to 5
+[2025-06-26 13:23:03 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 1
+[2025-06-26 13:23:08 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 1
+[2025-06-26 13:23:08 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 1 to 2
+[2025-06-26 13:23:11 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 1 to 2
+[2025-06-26 13:23:12 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 2 to 3
+[2025-06-26 13:23:17 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 2 to 3
+[2025-06-26 13:23:18 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 1
+[2025-06-26 13:23:28 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 1
+[2025-06-26 13:23:31 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 1 to 2
+[2025-06-26 13:23:31 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 2 to 3
+[2025-06-26 13:23:34 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 2 to 3
+[2025-06-26 13:23:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 4 to 5
+[2025-06-26 13:36:52 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 1
+[2025-06-26 13:36:53 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 1
+[2025-06-26 13:36:59 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 1
+[2025-06-26 13:49:54 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:49:57 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:01 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:01 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:01 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:01 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:01 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:01 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:01 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:01 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:01 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:01 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:01 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:01 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:01 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:01 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:01 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:01 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:02 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:08 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:50:10 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:44 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:46 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:46 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:46 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:47 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:48 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:48 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:48 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:48 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:48 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:48 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:48 INFO hecto::editor::uicomponents::view] draw from 0 to 54
+[2025-06-26 13:55:48 INFO hecto::editor::uicomponents::view] draw from 1 to 55
+[2025-06-26 13:55:48 INFO hecto::editor::uicomponents::view] draw from 2 to 56
+[2025-06-26 13:55:48 INFO hecto::editor::uicomponents::view] draw from 3 to 57
+[2025-06-26 13:55:48 INFO hecto::editor::uicomponents::view] draw from 4 to 58
+[2025-06-26 13:55:48 INFO hecto::editor::uicomponents::view] draw from 5 to 59
+[2025-06-26 13:55:48 INFO hecto::editor::uicomponents::view] draw from 6 to 60
+[2025-06-26 13:55:48 INFO hecto::editor::uicomponents::view] draw from 7 to 61
+[2025-06-26 13:55:48 INFO hecto::editor::uicomponents::view] draw from 8 to 62
+[2025-06-26 13:55:48 INFO hecto::editor::uicomponents::view] draw from 9 to 63
+[2025-06-26 13:55:48 INFO hecto::editor::uicomponents::view] draw from 10 to 64
+[2025-06-26 13:55:48 INFO hecto::editor::uicomponents::view] draw from 10 to 64
+[2025-06-26 13:55:48 INFO hecto::editor::uicomponents::view] draw from 11 to 65
+[2025-06-26 13:55:49 INFO hecto::editor::uicomponents::view] draw from 12 to 66
+[2025-06-26 13:55:49 INFO hecto::editor::uicomponents::view] draw from 13 to 67
+[2025-06-26 13:55:49 INFO hecto::editor::uicomponents::view] draw from 14 to 68
+[2025-06-26 13:55:49 INFO hecto::editor::uicomponents::view] draw from 15 to 69
+[2025-06-26 13:55:49 INFO hecto::editor::uicomponents::view] draw from 16 to 70
+[2025-06-26 13:55:49 INFO hecto::editor::uicomponents::view] draw from 17 to 71
+[2025-06-26 13:55:49 INFO hecto::editor::uicomponents::view] draw from 18 to 72
+[2025-06-26 13:55:49 INFO hecto::editor::uicomponents::view] draw from 19 to 73
+[2025-06-26 13:55:49 INFO hecto::editor::uicomponents::view] draw from 20 to 74
+[2025-06-26 13:55:49 INFO hecto::editor::uicomponents::view] draw from 21 to 75
+[2025-06-26 13:55:49 INFO hecto::editor::uicomponents::view] draw from 21 to 75
+[2025-06-26 13:55:49 INFO hecto::editor::uicomponents::view] draw from 22 to 76
+[2025-06-26 13:55:50 INFO hecto::editor::uicomponents::view] draw from 22 to 76
+[2025-06-26 13:55:50 INFO hecto::editor::uicomponents::view] draw from 22 to 76
+[2025-06-26 13:55:50 INFO hecto::editor::uicomponents::view] draw from 22 to 76
+[2025-06-26 13:55:50 INFO hecto::editor::uicomponents::view] draw from 22 to 76
+[2025-06-26 13:55:50 INFO hecto::editor::uicomponents::view] draw from 22 to 76
+[2025-06-26 13:55:50 INFO hecto::editor::uicomponents::view] draw from 22 to 76
+[2025-06-26 13:55:50 INFO hecto::editor::uicomponents::view] draw from 22 to 76
+[2025-06-26 13:55:50 INFO hecto::editor::uicomponents::view] draw from 22 to 76
+[2025-06-26 13:55:50 INFO hecto::editor::uicomponents::view] draw from 22 to 76
+[2025-06-26 13:55:50 INFO hecto::editor::uicomponents::view] draw from 22 to 76
+[2025-06-26 13:55:51 INFO hecto::editor::uicomponents::view] draw from 22 to 76
+[2025-06-26 13:55:51 INFO hecto::editor::uicomponents::view] draw from 23 to 77
+[2025-06-26 13:55:51 INFO hecto::editor::uicomponents::view] draw from 23 to 77
+[2025-06-26 13:55:51 INFO hecto::editor::uicomponents::view] draw from 23 to 77
+[2025-06-26 13:55:51 INFO hecto::editor::uicomponents::view] draw from 23 to 77
+[2025-06-26 13:55:51 INFO hecto::editor::uicomponents::view] draw from 23 to 77
+[2025-06-26 13:55:51 INFO hecto::editor::uicomponents::view] draw from 23 to 77
+[2025-06-26 13:55:51 INFO hecto::editor::uicomponents::view] draw from 24 to 78
+[2025-06-26 13:55:52 INFO hecto::editor::uicomponents::view] draw from 25 to 79
+[2025-06-26 13:55:52 INFO hecto::editor::uicomponents::view] draw from 26 to 80
+[2025-06-26 13:55:52 INFO hecto::editor::uicomponents::view] draw from 27 to 81
+[2025-06-26 13:55:52 INFO hecto::editor::uicomponents::view] draw from 28 to 82
+[2025-06-26 13:55:52 INFO hecto::editor::uicomponents::view] draw from 29 to 83
+[2025-06-26 13:55:52 INFO hecto::editor::uicomponents::view] draw from 30 to 84
+[2025-06-26 13:55:52 INFO hecto::editor::uicomponents::view] draw from 31 to 85
+[2025-06-26 13:55:52 INFO hecto::editor::uicomponents::view] draw from 32 to 86
+[2025-06-26 13:55:52 INFO hecto::editor::uicomponents::view] draw from 33 to 87
+[2025-06-26 13:55:52 INFO hecto::editor::uicomponents::view] draw from 34 to 88
+[2025-06-26 13:55:52 INFO hecto::editor::uicomponents::view] draw from 34 to 88
+[2025-06-26 13:55:53 INFO hecto::editor::uicomponents::view] draw from 35 to 89
+[2025-06-26 13:55:53 INFO hecto::editor::uicomponents::view] draw from 36 to 90
+[2025-06-26 13:55:53 INFO hecto::editor::uicomponents::view] draw from 37 to 91
+[2025-06-26 13:55:53 INFO hecto::editor::uicomponents::view] draw from 37 to 91
+[2025-06-26 13:55:54 INFO hecto::editor::uicomponents::view] draw from 37 to 91
+[2025-06-26 13:55:54 INFO hecto::editor::uicomponents::view] draw from 37 to 91
+[2025-06-26 13:55:54 INFO hecto::editor::uicomponents::view] draw from 38 to 92
+[2025-06-26 14:07:32 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 1
+[2025-06-26 14:07:33 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 1 to 2
+[2025-06-26 14:07:33 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 2 to 3
+[2025-06-26 14:07:33 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 3 to 4
+[2025-06-26 14:07:33 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 4 to 5
+[2025-06-26 14:07:33 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 5 to 6
+[2025-06-26 14:07:33 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 6 to 7
+[2025-06-26 14:07:34 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 7 to 8
+[2025-06-26 14:07:34 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 8 to 9
+[2025-06-26 14:07:34 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 28 to 29
+[2025-06-26 14:07:34 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 56 to 57
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 84 to 85
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 87 to 88
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 1
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 1 to 2
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 2 to 3
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 3 to 4
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 4 to 5
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 5 to 6
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 6 to 7
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 7 to 8
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 8 to 9
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 28 to 29
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 56 to 57
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 84 to 85
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 87 to 88
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 1
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 1 to 2
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 2 to 3
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 3 to 4
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 4 to 5
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 5 to 6
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 6 to 7
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 7 to 8
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 8 to 9
+[2025-06-26 14:07:35 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 28 to 29
+[2025-06-26 14:07:36 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 56 to 57
+[2025-06-26 14:07:36 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 84 to 86
+[2025-06-26 14:07:37 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 28 to 31
+[2025-06-26 14:07:38 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 28 to 32
+[2025-06-26 14:07:38 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 28 to 33
+[2025-06-26 14:07:39 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 28 to 34
+[2025-06-26 14:07:39 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 28 to 35
+[2025-06-26 14:07:39 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 28 to 36
+[2025-06-26 14:07:40 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 28 to 37
+[2025-06-26 14:07:40 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 28 to 38
+[2025-06-26 14:09:37 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 1
+[2025-06-26 14:09:37 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 2
+[2025-06-26 14:09:39 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 3
+[2025-06-26 14:09:39 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 4
+[2025-06-26 14:09:40 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 5
+[2025-06-26 14:09:40 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 6
+[2025-06-26 14:09:40 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 7
+[2025-06-26 14:09:40 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 8
+[2025-06-26 14:09:41 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 9
+[2025-06-26 14:09:41 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 10
+[2025-06-26 14:09:41 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 11
+[2025-06-26 14:09:41 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 12
+[2025-06-26 14:09:41 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 13
+[2025-06-26 14:09:41 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 14
+[2025-06-26 14:09:42 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 15
+[2025-06-26 14:09:42 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 16
+[2025-06-26 14:09:42 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 17
+[2025-06-26 14:09:43 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 18
+[2025-06-26 14:24:27 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 1
+[2025-06-26 14:24:32 INFO hecto::editor::uicomponents::view::highlighter] add annotation SelectedMatch from 0 to 1

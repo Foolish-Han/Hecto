@@ -1,4 +1,3 @@
-
 #![warn(
     clippy::all,
     clippy::pedantic,
@@ -11,7 +10,9 @@
 mod editor;
 use editor::Editor;
 mod prelude;
+use prelude::*;
 
 fn main() {
+    let _ = setup_logger();
     Editor::new().unwrap().run();
 }

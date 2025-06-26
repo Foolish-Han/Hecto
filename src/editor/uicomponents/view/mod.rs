@@ -1,4 +1,3 @@
-
 use crate::prelude::*;
 
 use super::{
@@ -47,6 +46,7 @@ impl View {
             prev_location: self.text_location,
             prev_scroll_offset: self.scroll_offset,
             query: None,
+            found: false,
         });
     }
 
@@ -81,7 +81,16 @@ impl View {
         );
         query
     }
-
+    fn is_search_found(&self) -> bool {
+        self.search_info
+            .as_ref()
+            .map_or_else(|| false, |search_info| search_info.found)
+    }
+    fn set_search_found(&mut self, found: bool) {
+        self.search_info
+            .as_mut()
+            .map_or_else(|| {}, |search_info| search_info.found = found);
+    }
     fn search_in_direction(&mut self, from: Location, direction: SearchDirection) {
         if let Some(location) = self.get_search_query().and_then(|query| {
             if query.is_empty() {
@@ -94,6 +103,9 @@ impl View {
         }) {
             self.text_location = location;
             self.center_text_location();
+            self.set_search_found(true);
+        } else {
+            self.set_search_found(false);
         }
         self.set_needs_redraw(true);
     }
@@ -328,11 +340,18 @@ impl UIComponent for View {
             .search_info
             .as_ref()
             .and_then(|search_info| search_info.query.as_deref());
-        let selected_match = query.is_some().then_some(self.text_location);
+        let selected_match = if self.is_search_found() {
+            query.is_some().then_some(self.text_location)
+        } else {
+            None
+        };
         let mut highlighter = Highlighter::new(query, selected_match);
 
-        for current_row in 0..end_y {
-            self.buffer.highlight(current_row, &mut highlighter);
+        for current_row in origin_row..end_y {
+            let line_idx = current_row
+                .saturating_sub(origin_row)
+                .saturating_add(scroll_top);
+            self.buffer.highlight(line_idx, &mut highlighter);
         }
 
         for current_row in origin_row..end_y {
