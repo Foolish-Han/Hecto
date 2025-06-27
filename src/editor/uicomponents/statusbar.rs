@@ -1,4 +1,3 @@
-
 use crate::prelude::*;
 
 use std::io::Error;
@@ -45,10 +44,11 @@ impl UIComponent for StatusBar {
         );
 
         let position_indicator = self.current_status.position_indicator_to_string();
+        let right_indicator = format!("{} | {}", self.current_status.file_type, position_indicator);
 
         let remainder_len = self.size.width.saturating_sub(beginning.len());
 
-        let status = format!("{beginning}{position_indicator:>remainder_len$}");
+        let status = format!("{beginning}{right_indicator:>remainder_len$}");
 
         let to_print = if status.len() <= self.size.width {
             status

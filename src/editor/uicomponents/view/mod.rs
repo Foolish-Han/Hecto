@@ -2,7 +2,7 @@ use crate::prelude::*;
 
 use super::{
     super::{
-        DocumentStatus, Line, Terminal,
+        DocumentStatus, FileType, Line, Terminal,
         command::{Edit, Move},
     },
     uicomponent::UIComponent,
@@ -34,6 +34,7 @@ impl View {
             current_line_idx: self.text_location.line_idx,
             file_name: format!("{}", self.buffer.get_file_info()),
             is_modified: self.buffer.is_dirty(),
+            file_type: self.buffer.get_file_info().get_file_type(),
         }
     }
 

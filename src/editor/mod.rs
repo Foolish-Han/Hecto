@@ -1,4 +1,3 @@
-
 use crate::prelude::*;
 use std::{
     env,
@@ -13,6 +12,7 @@ mod annotation;
 mod annotationtype;
 mod command;
 mod documentstatus;
+mod filetype;
 mod line;
 mod terminal;
 mod uicomponents;
@@ -28,6 +28,7 @@ use self::{
         System::{Dismiss, Quit, Resize, Save, Search},
     },
     documentstatus::DocumentStatus,
+    filetype::FileType,
     line::Line,
     terminal::Terminal,
     uicomponents::{CommandBar, MessageBar, StatusBar, UIComponent, View},
