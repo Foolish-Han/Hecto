@@ -1,5 +1,5 @@
 use chrono::Local;
-pub use log::{debug, error, info, trace, warn};
+pub use log::{info, warn};
 
 pub fn setup_logger() -> Result<(), fern::InitError> {
     fern::Dispatch::new()

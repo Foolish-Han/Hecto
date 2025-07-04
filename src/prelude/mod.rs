@@ -10,7 +10,7 @@ mod position;
 mod size;
 
 pub use location::Location;
-pub use log::{debug, error, info, setup_logger, trace, warn};
+pub use log::{info, setup_logger, warn};
 pub use position::Position;
 pub use size::Size;
 pub const NAME: &str = env!("CARGO_PKG_NAME");

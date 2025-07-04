@@ -30,8 +30,4 @@ impl DocumentStatus {
             self.total_lines
         )
     }
-
-    pub fn file_type_to_string(&self) -> String {
-        self.file_type.to_string()
-    }
 }
