@@ -134,12 +134,17 @@ impl View {
     }
 
     pub fn save(&mut self) -> Result<(), Error> {
-        self.buffer.save()
+        self.buffer.save()?;
+        self.set_needs_redraw(true);
+        Ok(())
     }
 
     pub fn save_as(&mut self, file_name: &str) -> Result<(), Error> {
-        self.buffer.save_as(file_name)
+        self.buffer.save_as(file_name)?;
+        self.set_needs_redraw(true);
+        Ok(())
     }
+
     pub fn handle_edit_command(&mut self, command: Edit) {
         match command {
             Edit::DeleteBackward => self.delete_backward(),
@@ -346,7 +351,11 @@ impl UIComponent for View {
         } else {
             None
         };
-        let mut highlighter = Highlighter::new(query, selected_match);
+        let mut highlighter = Highlighter::new(
+            query,
+            selected_match,
+            self.buffer.get_file_info().get_file_type(),
+        );
 
         for current_row in origin_row..end_y {
             let line_idx = current_row
