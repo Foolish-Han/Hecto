@@ -1,5 +1,5 @@
-mod graphemewidth;
-mod textfragment;
+mod grapheme_width;
+mod text_fragment;
 
 use crate::{editor::annotation::Annotation, prelude::*};
 
@@ -9,8 +9,8 @@ use std::{
     ops::{Deref, Range},
 };
 
-use graphemewidth::GraphemeWidth;
-use textfragment::TextFragment;
+use grapheme_width::GraphemeWidth;
+use text_fragment::TextFragment;
 use unicode_segmentation::UnicodeSegmentation;
 use unicode_width::UnicodeWidthStr;
 

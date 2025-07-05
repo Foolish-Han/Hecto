@@ -6,11 +6,11 @@ use std::{convert::TryFrom, usize};
 use crossterm::event::Event;
 
 mod edit;
-mod movecommand;
+mod move_command;
 mod system;
 
 pub use edit::Edit;
-pub use movecommand::Move;
+pub use move_command::Move;
 pub use system::System;
 
 #[derive(Clone, Copy)]

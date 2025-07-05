@@ -6,12 +6,12 @@ use std::{
     fmt::{self, Display},
 };
 
-mod annotatedstringpart;
-mod annotationstringiterator;
+mod annotated_string_part;
+mod annotation_string_iterator;
 
 use super::{Annotation, AnnotationType};
-use annotatedstringpart::AnnotatedStringPart;
-use annotationstringiterator::AnnotatedStringIterator;
+use annotated_string_part::AnnotatedStringPart;
+use annotation_string_iterator::AnnotatedStringIterator;
 #[derive(Default, Debug)]
 pub struct AnnotatedString {
     string: String,

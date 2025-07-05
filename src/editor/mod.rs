@@ -7,31 +7,31 @@ use std::{
 
 use crossterm::event::{Event, KeyEvent, KeyEventKind, read};
 
-mod annotatedstring;
+mod annotated_string;
 mod annotation;
-mod annotationtype;
+mod annotation_type;
 mod command;
-mod documentstatus;
-mod filetype;
+mod document_status;
+mod file_type;
 mod line;
 mod terminal;
-mod uicomponents;
+mod ui_components;
 
 use self::{
-    annotatedstring::AnnotatedString,
+    annotated_string::AnnotatedString,
     annotation::Annotation,
-    annotationtype::AnnotationType,
+    annotation_type::AnnotationType,
     command::{
         Command::{self, Edit, Move, System},
         Edit::InsertNewline,
         Move::{Down, Left, Right, Up},
         System::{Dismiss, Quit, Resize, Save, Search},
     },
-    documentstatus::DocumentStatus,
-    filetype::FileType,
+    document_status::DocumentStatus,
+    file_type::FileType,
     line::Line,
     terminal::Terminal,
-    uicomponents::{CommandBar, MessageBar, StatusBar, UIComponent, View},
+    ui_components::{CommandBar, MessageBar, StatusBar, UIComponent, View},
 };
 
 const QUIT_TIMES: u8 = 3;

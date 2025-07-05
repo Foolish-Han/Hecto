@@ -1,4 +1,4 @@
-use crate::{editor::annotatedstring::AnnotatedString, prelude::*};
+use crate::{editor::annotated_string::AnnotatedString, prelude::*};
 
 use std::{
     fs::{File, read_to_string},

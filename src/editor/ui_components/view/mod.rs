@@ -5,18 +5,18 @@ use super::{
         DocumentStatus, FileType, Line, Terminal,
         command::{Edit, Move},
     },
-    uicomponent::UIComponent,
+    ui_component::UIComponent,
 };
 mod buffer;
-mod fileinfo;
+mod file_info;
 mod highlighter;
-mod searchdirection;
-mod searchinfo;
+mod search_direction;
+mod search_info;
 use buffer::Buffer;
-use fileinfo::FileInfo;
+use file_info::FileInfo;
 use highlighter::Highlighter;
-use searchdirection::SearchDirection;
-use searchinfo::SearchInfo;
+use search_direction::SearchDirection;
+use search_info::SearchInfo;
 use std::{cmp::min, io::Error, usize};
 #[derive(Default)]
 pub struct View {
